@@ -1,0 +1,183 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Attraction</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">models</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Attraction (models)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Attraction</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.3%
+  </span>
+  <span class="absValue">
+    (12/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93%
+  </span>
+  <span class="absValue">
+    (40/ 43)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package models;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;/**
+<i>4</i>&nbsp; *  Project 2:&lt;br&gt;
+<i>5</i>&nbsp; * &lt;br&gt;
+<i>6</i>&nbsp; *  Attraction is used to model an Attraction object
+<i>7</i>&nbsp; *
+<i>8</i>&nbsp; *  &lt;br&gt; &lt;br&gt;
+<i>9</i>&nbsp; *  Created: &lt;br&gt;
+<i>10</i>&nbsp; *     May 11, 2020 Paityn Maynard&lt;br&gt;
+<i>11</i>&nbsp; *     With assistance from: &lt;br&gt;
+<i>12</i>&nbsp; *  Modifications: &lt;br&gt;
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; *      &lt;hr&gt;
+<i>15</i>&nbsp; *   Added toString for JSON RESPONSES
+<i>16</i>&nbsp; *      Jean Aldoph II
+<i>17</i>&nbsp; *      &lt;hr&gt;
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * &lt;br&gt;
+<i>20</i>&nbsp; *  @author
+<i>21</i>&nbsp; *  @version 11 May 2020
+<i>22</i>&nbsp; *
+<i>23</i>&nbsp; */
+<i>24</i>&nbsp;public class Attraction {//Start of Attractions class
+<b class="fc"><i>25</i>&nbsp;//Instance Variables</b>
+<b class="fc"><i>26</i>&nbsp;    String name, status, imageurl;</b>
+<b class="fc"><i>27</i>&nbsp;    int id, rating;</b>
+<b class="fc"><i>28</i>&nbsp;</b>
+<b class="fc"><i>29</i>&nbsp;//Constructors</b>
+<b class="fc"><i>30</i>&nbsp;    public Attraction()</b>
+<b class="fc"><i>31</i>&nbsp;    {</b>
+<b class="fc"><i>32</i>&nbsp;        this.status=null;</b>
+<b class="fc"><i>33</i>&nbsp;    }</b>
+<i>34</i>&nbsp;
+<b class="fc"><i>35</i>&nbsp;    /**</b>
+<i>36</i>&nbsp;     * Used to create a new Attraction object
+<i>37</i>&nbsp;     * @param name
+<i>38</i>&nbsp;     * @param status
+<b class="fc"><i>39</i>&nbsp;     * @param imageurl</b>
+<i>40</i>&nbsp;     * @param id
+<i>41</i>&nbsp;     * @param rating
+<i>42</i>&nbsp;     */
+<b class="fc"><i>43</i>&nbsp;    public Attraction(String name, String status, String imageurl, int id, int rating){</b>
+<b class="fc"><i>44</i>&nbsp;        this.name=name;</b>
+<b class="fc"><i>45</i>&nbsp;        this.status=status;</b>
+<b class="fc"><i>46</i>&nbsp;        this.imageurl = imageurl;</b>
+<b class="fc"><i>47</i>&nbsp;        this.id=id;</b>
+<b class="fc"><i>48</i>&nbsp;        this.rating=rating;</b>
+<b class="fc"><i>49</i>&nbsp;    }</b>
+<i>50</i>&nbsp;//Getters
+<b class="fc"><i>51</i>&nbsp;    public String getName() {</b>
+<b class="nc"><i>52</i>&nbsp;        return name;</b>
+<i>53</i>&nbsp;    }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    public String getStatus() {
+<b class="fc"><i>56</i>&nbsp;        return status;</b>
+<b class="fc"><i>57</i>&nbsp;    }</b>
+<b class="fc"><i>58</i>&nbsp;</b>
+<i>59</i>&nbsp;    public String getImageurl() {
+<b class="nc"><i>60</i>&nbsp;        return imageurl;</b>
+<b class="fc"><i>61</i>&nbsp;    }</b>
+<b class="fc"><i>62</i>&nbsp;</b>
+<i>63</i>&nbsp;    public int getId() {
+<b class="fc"><i>64</i>&nbsp;        return id;</b>
+<b class="fc"><i>65</i>&nbsp;    }</b>
+<b class="fc"><i>66</i>&nbsp;</b>
+<i>67</i>&nbsp;    public int getRating() {
+<b class="nc"><i>68</i>&nbsp;        return rating;</b>
+<b class="fc"><i>69</i>&nbsp;    }</b>
+<b class="fc"><i>70</i>&nbsp;</b>
+<i>71</i>&nbsp;//Setters
+<i>72</i>&nbsp;    public void setName(String name) {
+<b class="fc"><i>73</i>&nbsp;        this.name = name;</b>
+<b class="fc"><i>74</i>&nbsp;    }</b>
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    public void setStatus(String status) {
+<b class="fc"><i>77</i>&nbsp;        this.status = status;</b>
+<b class="fc"><i>78</i>&nbsp;    }</b>
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    public void setImageurl(String imageurl) {
+<b class="fc"><i>81</i>&nbsp;        this.imageurl = imageurl;</b>
+<b class="fc"><i>82</i>&nbsp;    }</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    public void setId(int id) {
+<b class="fc"><i>85</i>&nbsp;        this.id = id;</b>
+<b class="fc"><i>86</i>&nbsp;    }</b>
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    public void setRating(int rating) {
+<b class="fc"><i>89</i>&nbsp;        this.rating = rating;</b>
+<b class="fc"><i>90</i>&nbsp;    }</b>
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;    @Override
+<i>93</i>&nbsp;    public String toString() {
+<b class="fc"><i>94</i>&nbsp;        return &quot;{name=&quot; +name+</b>
+<i>95</i>&nbsp;                &quot;,status=&quot; +status+
+<i>96</i>&nbsp;                &quot;,imageurl=&quot; +imageurl+
+<i>97</i>&nbsp;                &quot;,id=&quot; +id+
+<i>98</i>&nbsp;                &quot;,rating=&quot;+rating+&#39;}&#39;;
+<i>99</i>&nbsp;    }
+<i>100</i>&nbsp;}//End of Attractions Class
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 02:18</div>
+</div>
+</body>
+</html>

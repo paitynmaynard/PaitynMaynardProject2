@@ -1,0 +1,78 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DAO</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">dao</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DAO (dao)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">DAO</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package dao;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.util.ArrayList;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;/**
+<i>6</i>&nbsp; *  Project 2:&lt;br&gt;
+<i>7</i>&nbsp; * &lt;br&gt;
+<i>8</i>&nbsp; *  The DAO interface serves as an interface for a generic repository structure and behavior base.
+<i>9</i>&nbsp; *  DAO subclasses can be tailored to use their own choice of data/object type to obtain information from
+<i>10</i>&nbsp; *    an appropriate database.
+<i>11</i>&nbsp; *  Generic T can be replaced by any primary data/obejct type required/expected for a system.
+<i>12</i>&nbsp; *  Generic ID can be replaced by the appropriate data type used for a primary key.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; *  &lt;br&gt; &lt;br&gt;
+<i>15</i>&nbsp; *  Created: &lt;br&gt;
+<i>16</i>&nbsp; *     11 May 2020, Barthelemy Martinon&lt;br&gt;
+<i>17</i>&nbsp; *     With assistance from: August Duet&lt;br&gt;
+<i>18</i>&nbsp; *  Modifications: &lt;br&gt;
+<i>19</i>&nbsp; *     11 May 2020, Barthelemy Martinon,    Created class.
+<i>20</i>&nbsp; * &lt;br&gt;
+<i>21</i>&nbsp; *  @author Barthelemy Martinon   With assistance from: August Duet
+<i>22</i>&nbsp; *  @version 11 May 2020
+<i>23</i>&nbsp; */
+<i>24</i>&nbsp;public interface DAO&lt;T, ID&gt; {
+<i>25</i>&nbsp;    T findById(ID id);
+<i>26</i>&nbsp;    ArrayList&lt;T&gt; findAll();
+<i>27</i>&nbsp;    ID save(T obj);
+<i>28</i>&nbsp;    void update(T newObj, ID id);
+<i>29</i>&nbsp;    void delete(T obj);
+<i>30</i>&nbsp;}
+<i>31</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 02:18</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+url=jdbc:postgresql://revdemo.cmyaylobpmky.us-east-2.rds.amazonaws.com:5432/postgres
+name=voldemort
+password=password
+
+select now() + INTERVAL '30 YEAR';    	
+drop table project2.maintenance_tickets ;  	
+create table project2.maintenance_tickets 
+(
+	maintenance_ticketid serial primary key,
+	attractionid bigint
+	employeeid bigint,
+	date_made date,
+	date_finished date,
+	description VARCHAR(700),
+	status VARCHAR(60),
+	isActive boolean
+);
+
+docker build -t cmredistest:v1
+docker tag cmredistest:v1 jeanaldoph/voldemort:cmredistest
+docker push jeanaldoph/voldemort:cmredistest
+
+docker build -t ccredistest:v1
+docker tag ccredistest:v1 jeanaldoph/voldemort:ccredistest
+docker push jeanaldoph/voldermort:ccredistest

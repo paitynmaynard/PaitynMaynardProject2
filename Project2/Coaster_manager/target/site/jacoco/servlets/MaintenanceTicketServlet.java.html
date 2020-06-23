@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MaintenanceTicketServlet.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Coaster_manager</a> &gt; <a href="index.source.html" class="el_package">servlets</a> &gt; <span class="el_source">MaintenanceTicketServlet.java</span></div><h1>MaintenanceTicketServlet.java</h1><pre class="source lang-java linenums">package servlets;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import data.SQLDatabaseMaintenance_Ticket;
+import dto.MaintenanceTicketTransfer;
+import dto.MaintenanceTicketWrapper;
+import models.Maintenance_Ticket;
+import utils.PostgresConnectionUtil;
+/**
+ * Project 2
+ *  MaintenanceTicketServlet
+ *  Created:
+ *     May 13, 2020 Rayan Vakil
+ *
+ * Modifications:
+ *	Jean Aldoph: Changed SQLDatabaseMaintenance_ticket ticket = sqlDatabaseMaintenance_ticket.findByID(Integer);
+ * 	            to Maintenance_Ticket ticket = sqlDatabaseMaintenance_ticket.findByID(new Integer(indexHeaderValue));
+ *
+ *  Paityn Maynard: Added find active to doGet -May 20
+ *                  Added comment blocks and comment lines -May 20
+ * @author
+ * @version 05/20/2020
+ */
+
+<span class="nc" id="L34">public class MaintenanceTicketServlet extends HttpServlet {//Start of MaintenanceTicketServlet</span>
+//Instance Variables
+<span class="nc" id="L36">	Maintenance_Ticket maintenance_ticket = new Maintenance_Ticket();</span>
+<span class="nc" id="L37">	SQLDatabaseMaintenance_Ticket sqlDatabaseMaintenance_ticket = new SQLDatabaseMaintenance_Ticket(new PostgresConnectionUtil());</span>
+<span class="nc" id="L38">	private static Logger LOG = Logger.getLogger(MaintenanceTicketServlet.class);</span>
+
+//Methods
+
+    /**
+     *
+      * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {//Start of doGet method
+<span class="nc" id="L51">		String getType = req.getHeader(&quot;find&quot;);</span>
+
+<span class="nc bnc" id="L53" title="All 2 branches missed.">		if (getType == null) {//Start of first if statement</span>
+<span class="nc" id="L54">			resp.setStatus(400);</span>
+		}//End of first if statement
+
+<span class="nc bnc" id="L57" title="All 2 branches missed.">		else if (getType.trim().equalsIgnoreCase(&quot;all&quot;)) {//Start of first else if statement</span>
+<span class="nc" id="L58">			ObjectMapper om = new ObjectMapper();</span>
+<span class="nc" id="L59">			ArrayList&lt;Maintenance_Ticket&gt; tickets = sqlDatabaseMaintenance_ticket.findAll();</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">			if (tickets != null) {//Start of second if statement</span>
+<span class="nc" id="L61">				MaintenanceTicketWrapper ticketList = new MaintenanceTicketWrapper();</span>
+<span class="nc" id="L62">				ticketList.setTickets(tickets);</span>
+<span class="nc" id="L63">				String ticketsResponse = om.writeValueAsString(tickets);</span>
+<span class="nc" id="L64">				resp.getWriter().write(ticketsResponse);</span>
+<span class="nc" id="L65">				resp.setStatus(200);</span>
+<span class="nc" id="L66">				resp.setContentType(&quot;application/json&quot;);</span>
+<span class="nc" id="L67">				resp.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="nc" id="L68">			}//End of second if statement</span>
+			else {//Start of second else statement
+<span class="nc" id="L70">				resp.setStatus(400);</span>
+			}//End of second else statement
+<span class="nc" id="L72">		}//End of first else if statement</span>
+
+<span class="nc bnc" id="L74" title="All 2 branches missed.">		else if (getType.trim().equalsIgnoreCase(&quot;id&quot;)) {//Start of second else if statement</span>
+<span class="nc" id="L75">            System.out.println(&quot;findByID&quot;);</span>
+<span class="nc" id="L76">            System.out.println(req.getHeader(&quot;id&quot;));</span>
+<span class="nc" id="L77">			ObjectMapper om = new ObjectMapper();</span>
+<span class="nc" id="L78">			Integer id = Integer.parseInt(req.getHeader(&quot;id&quot;));</span>
+<span class="nc" id="L79">			maintenance_ticket = sqlDatabaseMaintenance_ticket.findByID(id);</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">			if (maintenance_ticket != null) {//Start of third if statement</span>
+<span class="nc" id="L81">				String ticketsResponse = om.writeValueAsString(maintenance_ticket); </span>
+<span class="nc" id="L82">				resp.getWriter().write(ticketsResponse);</span>
+<span class="nc" id="L83">				resp.setStatus(200);</span>
+<span class="nc" id="L84">				resp.setContentType(&quot;application/json&quot;);</span>
+<span class="nc" id="L85">				resp.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="nc" id="L86">			}//End of third if statement</span>
+			else {//Start of third else statement
+<span class="nc" id="L88">			    resp.getWriter().write(&quot;No Ticket found with that ID&quot;);</span>
+<span class="nc" id="L89">				resp.setStatus(400);</span>
+			}//End of third else statement
+<span class="nc" id="L91">		}//End of second else if statement</span>
+
+<span class="nc bnc" id="L93" title="All 2 branches missed.">		else if (getType.trim().equalsIgnoreCase(&quot;attraction&quot;)) {//Start of third else if statement</span>
+<span class="nc" id="L94">			ObjectMapper om = new ObjectMapper();</span>
+<span class="nc" id="L95">			Integer id = Integer.parseInt(req.getHeader(&quot;id&quot;));</span>
+<span class="nc" id="L96">            ArrayList&lt;Maintenance_Ticket&gt; tickets = sqlDatabaseMaintenance_ticket.findByAttraction(id);</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">			if (maintenance_ticket != null) {//Start of fourth if statement</span>
+<span class="nc" id="L98">				String ticketsResponse = om.writeValueAsString(tickets);</span>
+<span class="nc" id="L99">				resp.getWriter().write(ticketsResponse);</span>
+<span class="nc" id="L100">				resp.setStatus(200);</span>
+<span class="nc" id="L101">				resp.setContentType(&quot;application/json&quot;);</span>
+<span class="nc" id="L102">				resp.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="nc" id="L103">			}//End of fourth if statement</span>
+			else {//Start of fourth else statement
+<span class="nc" id="L105">				resp.setStatus(400);</span>
+			}//End of fourth else statement
+<span class="nc" id="L107">		} //End of third else if statement</span>
+
+<span class="nc bnc" id="L109" title="All 2 branches missed.">		else if(getType.trim().equalsIgnoreCase(&quot;active&quot;)) {//Start of fourth else if statement</span>
+<span class="nc" id="L110">            ObjectMapper om = new ObjectMapper();</span>
+<span class="nc" id="L111">            ArrayList&lt;Maintenance_Ticket&gt; tickets = sqlDatabaseMaintenance_ticket.findActive();</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">            if (tickets != null) {//Start of fifth if statement</span>
+<span class="nc" id="L113">                MaintenanceTicketWrapper ticketList = new MaintenanceTicketWrapper();</span>
+<span class="nc" id="L114">                ticketList.setTickets(tickets);</span>
+<span class="nc" id="L115">                String ticketsResponse = om.writeValueAsString(tickets);</span>
+<span class="nc" id="L116">                resp.getWriter().write(ticketsResponse);</span>
+<span class="nc" id="L117">                resp.setStatus(200);</span>
+<span class="nc" id="L118">                resp.setContentType(&quot;application/json&quot;);</span>
+<span class="nc" id="L119">                resp.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="nc" id="L120">            }//End of fifth if statement</span>
+            else {//Start of fifth else statement
+<span class="nc" id="L122">                resp.setStatus(400);</span>
+            }//End of fifth else statement
+<span class="nc" id="L124">        }//End of fourth else if statement</span>
+
+		else {//Start of first else statement
+<span class="nc" id="L127">			resp.setStatus(400);</span>
+		}//End of first else statement
+<span class="nc" id="L129">	}//End doGet method</span>
+
+    /**
+     * Not implemented
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+      @Override
+     protected void doHead(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+<span class="nc" id="L140">        super.doHead(req, resp);</span>
+<span class="nc" id="L141">     }</span>
+
+        /*
+         * Requried JSON for addition
+		{
+ 			&quot;attractionId&quot;:[Integer value],
+  			&quot;employeeId&quot;: [Integer value],
+			&quot;status&quot;:[String value],
+			&quot;description&quot;:[String value]
+			&quot;isActive&quot;:[boolean value]
+			&quot;
+		}
+         */
+
+    /**
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+     @Override
+     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {//Start of doPost method
+
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        if(req.getContentType().equals(&quot;application/json&quot;)) {//Start of first if statement</span>
+<span class="nc" id="L166">            SQLDatabaseMaintenance_Ticket sqlDatabaseMaintenance_ticket = new SQLDatabaseMaintenance_Ticket(new PostgresConnectionUtil());</span>
+<span class="nc" id="L167">            ObjectMapper om = new ObjectMapper();</span>
+<span class="nc" id="L168">            MaintenanceTicketTransfer ticketData = om.readValue(req.getReader(), MaintenanceTicketTransfer.class);</span>
+<span class="nc" id="L169">            int attractionId = ticketData.getAttractionId();</span>
+<span class="nc" id="L170">            String status = ticketData.getStatus();</span>
+<span class="nc" id="L171">            String description = ticketData.getDescription();</span>
+<span class="nc" id="L172">            int employeeId = ticketData.getEmployeeId();</span>
+<span class="nc" id="L173">            boolean isActive = ticketData.getIsActive();</span>
+<span class="nc" id="L174">            Maintenance_Ticket newTicket = new Maintenance_Ticket(attractionId, employeeId, status, description, isActive);</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">                if(!sqlDatabaseMaintenance_ticket.add(newTicket)) {//Start of second if statement</span>
+<span class="nc" id="L176">                    resp.setStatus(400);</span>
+                }//End of second if statement
+                else {//Start of second else statement
+<span class="nc" id="L179">                    resp.setStatus(201);</span>
+                }//End of second else statement
+<span class="nc" id="L181">        }//End of first if statement</span>
+        else {//Start of first else statement
+<span class="nc" id="L183">            resp.setStatus(400);</span>
+        }//End of first else statement
+<span class="nc" id="L185">     }//End of doPost method</span>
+
+       /*
+        *  Required JSON for update
+        * {
+        *	 &quot;mainId&quot;:[Integer value],
+        *	 &quot;status&quot;:[String value],
+   	 	*	 &quot;endDate&quot;:[String value, format MM-dd-yyyy HH:mm]
+   	 	*    &quot;isActive:[boolean value]
+        * }
+        */
+
+    /**
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+     @Override
+     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{//Start of doPut method
+<span class="nc bnc" id="L206" title="All 2 branches missed.">        if(req.getContentType().equals(&quot;application/json&quot;)) {//Start of first if statement</span>
+<span class="nc" id="L207">            ObjectMapper om = new ObjectMapper();</span>
+<span class="nc" id="L208">            MaintenanceTicketTransfer ticketData = om.readValue(req.getReader(), MaintenanceTicketTransfer.class);</span>
+<span class="nc" id="L209">            LocalDateTime endDate = LocalDateTime.parse(ticketData.getEndDate(), DateTimeFormatter.ofPattern(&quot;MM-dd-yyyy HH:mm&quot;));</span>
+<span class="nc" id="L210">            Maintenance_Ticket updateTicket = sqlDatabaseMaintenance_ticket.findByID(ticketData.getMainId());</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">                if(updateTicket != null) {//Start of second if statement</span>
+<span class="nc" id="L212">                    updateTicket.setEndDate(endDate);</span>
+<span class="nc" id="L213">                    updateTicket.setStatus(ticketData.getStatus());</span>
+<span class="nc" id="L214">                    sqlDatabaseMaintenance_ticket.update(updateTicket.getMainId(), updateTicket);</span>
+<span class="nc" id="L215">                    resp.setStatus(204);</span>
+                }//End of second if statement
+                else {//Start of second else statement
+<span class="nc" id="L218">                    resp.setStatus(400);</span>
+                }//End of second else statement
+<span class="nc" id="L220">        }//End of first if statement</span>
+        else {//Start of first else statement
+<span class="nc" id="L222">            resp.setStatus(400);</span>
+        }//End of else statement
+<span class="nc" id="L224">     }//End of doPut method</span>
+
+    /**
+     * Unimplemented doDelete
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+     @Override
+     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+<span class="nc" id="L235">        super.doDelete(req, resp);</span>
+<span class="nc" id="L236">     }</span>
+
+    /**
+     * Unimplemented destroy
+     */
+    @Override
+     public void destroy() {
+<span class="nc" id="L243">        super.destroy();</span>
+<span class="nc" id="L244">     }</span>
+
+    /**
+     * Unimplemented init
+     * @throws ServletException
+     */
+    @Override
+     public void init() throws ServletException {
+<span class="nc" id="L252">        super.init();</span>
+<span class="nc" id="L253">     }</span>
+}//End of MaintenanceTicketServlet
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

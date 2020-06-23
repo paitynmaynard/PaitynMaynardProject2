@@ -1,0 +1,337 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MaintenanceTicketServlet</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">servlets</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MaintenanceTicketServlet (servlets)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MaintenanceTicketServlet</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 97)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package servlets;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.io.IOException;
+<i>4</i>&nbsp;import java.time.LocalDateTime;
+<i>5</i>&nbsp;import java.time.format.DateTimeFormatter;
+<i>6</i>&nbsp;import java.util.ArrayList;
+<i>7</i>&nbsp;import javax.servlet.ServletException;
+<i>8</i>&nbsp;import javax.servlet.http.HttpServlet;
+<i>9</i>&nbsp;import javax.servlet.http.HttpServletRequest;
+<i>10</i>&nbsp;import javax.servlet.http.HttpServletResponse;
+<i>11</i>&nbsp;import org.apache.log4j.Logger;
+<i>12</i>&nbsp;import com.fasterxml.jackson.databind.ObjectMapper;
+<i>13</i>&nbsp;import data.SQLDatabaseMaintenance_Ticket;
+<i>14</i>&nbsp;import dto.MaintenanceTicketTransfer;
+<i>15</i>&nbsp;import dto.MaintenanceTicketWrapper;
+<i>16</i>&nbsp;import models.Maintenance_Ticket;
+<i>17</i>&nbsp;import utils.PostgresConnectionUtil;
+<i>18</i>&nbsp;/**
+<i>19</i>&nbsp; * Project 2
+<i>20</i>&nbsp; *  MaintenanceTicketServlet
+<i>21</i>&nbsp; *  Created:
+<i>22</i>&nbsp; *     May 13, 2020 Rayan Vakil
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * Modifications:
+<i>25</i>&nbsp; *	Jean Aldoph: Changed SQLDatabaseMaintenance_ticket ticket = sqlDatabaseMaintenance_ticket.findByID(Integer);
+<i>26</i>&nbsp; * 	            to Maintenance_Ticket ticket = sqlDatabaseMaintenance_ticket.findByID(new Integer(indexHeaderValue));
+<i>27</i>&nbsp; *
+<i>28</i>&nbsp; *  Paityn Maynard: Added find active to doGet -May 20
+<i>29</i>&nbsp; *                  Added comment blocks and comment lines -May 20
+<i>30</i>&nbsp; * @author
+<i>31</i>&nbsp; * @version 05/20/2020
+<i>32</i>&nbsp; */
+<i>33</i>&nbsp;
+<b class="nc"><i>34</i>&nbsp;public class MaintenanceTicketServlet extends HttpServlet {//Start of MaintenanceTicketServlet</b>
+<i>35</i>&nbsp;//Instance Variables
+<b class="nc"><i>36</i>&nbsp;	Maintenance_Ticket maintenance_ticket = new Maintenance_Ticket();</b>
+<b class="nc"><i>37</i>&nbsp;	SQLDatabaseMaintenance_Ticket sqlDatabaseMaintenance_ticket = new SQLDatabaseMaintenance_Ticket(new PostgresConnectionUtil());</b>
+<b class="nc"><i>38</i>&nbsp;	private static Logger LOG = Logger.getLogger(MaintenanceTicketServlet.class);</b>
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;//Methods
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /**
+<i>43</i>&nbsp;     *
+<i>44</i>&nbsp;      * @param req
+<i>45</i>&nbsp;     * @param resp
+<i>46</i>&nbsp;     * @throws ServletException
+<i>47</i>&nbsp;     * @throws IOException
+<i>48</i>&nbsp;     */
+<i>49</i>&nbsp;	@Override
+<i>50</i>&nbsp;	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {//Start of doGet method
+<b class="nc"><i>51</i>&nbsp;		String getType = req.getHeader(&quot;find&quot;);</b>
+<i>52</i>&nbsp;
+<b class="nc"><i>53</i>&nbsp;		if (getType == null) {//Start of first if statement</b>
+<b class="nc"><i>54</i>&nbsp;			resp.setStatus(400);</b>
+<i>55</i>&nbsp;		}//End of first if statement
+<i>56</i>&nbsp;
+<b class="nc"><i>57</i>&nbsp;		else if (getType.trim().equalsIgnoreCase(&quot;all&quot;)) {//Start of first else if statement</b>
+<b class="nc"><i>58</i>&nbsp;			ObjectMapper om = new ObjectMapper();</b>
+<b class="nc"><i>59</i>&nbsp;			ArrayList&lt;Maintenance_Ticket&gt; tickets = sqlDatabaseMaintenance_ticket.findAll();</b>
+<b class="nc"><i>60</i>&nbsp;			if (tickets != null) {//Start of second if statement</b>
+<b class="nc"><i>61</i>&nbsp;				MaintenanceTicketWrapper ticketList = new MaintenanceTicketWrapper();</b>
+<b class="nc"><i>62</i>&nbsp;				ticketList.setTickets(tickets);</b>
+<b class="nc"><i>63</i>&nbsp;				String ticketsResponse = om.writeValueAsString(tickets);</b>
+<b class="nc"><i>64</i>&nbsp;				resp.getWriter().write(ticketsResponse);</b>
+<b class="nc"><i>65</i>&nbsp;				resp.setStatus(200);</b>
+<b class="nc"><i>66</i>&nbsp;				resp.setContentType(&quot;application/json&quot;);</b>
+<b class="nc"><i>67</i>&nbsp;				resp.setCharacterEncoding(&quot;UTF-8&quot;);</b>
+<b class="nc"><i>68</i>&nbsp;			}//End of second if statement</b>
+<i>69</i>&nbsp;			else {//Start of second else statement
+<b class="nc"><i>70</i>&nbsp;				resp.setStatus(400);</b>
+<i>71</i>&nbsp;			}//End of second else statement
+<b class="nc"><i>72</i>&nbsp;		}//End of first else if statement</b>
+<i>73</i>&nbsp;
+<b class="nc"><i>74</i>&nbsp;		else if (getType.trim().equalsIgnoreCase(&quot;id&quot;)) {//Start of second else if statement</b>
+<b class="nc"><i>75</i>&nbsp;            System.out.println(&quot;findByID&quot;);</b>
+<b class="nc"><i>76</i>&nbsp;            System.out.println(req.getHeader(&quot;id&quot;));</b>
+<b class="nc"><i>77</i>&nbsp;			ObjectMapper om = new ObjectMapper();</b>
+<b class="nc"><i>78</i>&nbsp;			Integer id = Integer.parseInt(req.getHeader(&quot;id&quot;));</b>
+<b class="nc"><i>79</i>&nbsp;			maintenance_ticket = sqlDatabaseMaintenance_ticket.findByID(id);</b>
+<b class="nc"><i>80</i>&nbsp;			if (maintenance_ticket != null) {//Start of third if statement</b>
+<b class="nc"><i>81</i>&nbsp;				String ticketsResponse = om.writeValueAsString(maintenance_ticket); </b>
+<b class="nc"><i>82</i>&nbsp;				resp.getWriter().write(ticketsResponse);</b>
+<b class="nc"><i>83</i>&nbsp;				resp.setStatus(200);</b>
+<b class="nc"><i>84</i>&nbsp;				resp.setContentType(&quot;application/json&quot;);</b>
+<b class="nc"><i>85</i>&nbsp;				resp.setCharacterEncoding(&quot;UTF-8&quot;);</b>
+<b class="nc"><i>86</i>&nbsp;			}//End of third if statement</b>
+<i>87</i>&nbsp;			else {//Start of third else statement
+<b class="nc"><i>88</i>&nbsp;			    resp.getWriter().write(&quot;No Ticket found with that ID&quot;);</b>
+<b class="nc"><i>89</i>&nbsp;				resp.setStatus(400);</b>
+<i>90</i>&nbsp;			}//End of third else statement
+<b class="nc"><i>91</i>&nbsp;		}//End of second else if statement</b>
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;		else if (getType.trim().equalsIgnoreCase(&quot;attraction&quot;)) {//Start of third else if statement</b>
+<b class="nc"><i>94</i>&nbsp;			ObjectMapper om = new ObjectMapper();</b>
+<b class="nc"><i>95</i>&nbsp;			Integer id = Integer.parseInt(req.getHeader(&quot;id&quot;));</b>
+<b class="nc"><i>96</i>&nbsp;            ArrayList&lt;Maintenance_Ticket&gt; tickets = sqlDatabaseMaintenance_ticket.findByAttraction(id);</b>
+<b class="nc"><i>97</i>&nbsp;			if (maintenance_ticket != null) {//Start of fourth if statement</b>
+<b class="nc"><i>98</i>&nbsp;				String ticketsResponse = om.writeValueAsString(tickets);</b>
+<b class="nc"><i>99</i>&nbsp;				resp.getWriter().write(ticketsResponse);</b>
+<b class="nc"><i>100</i>&nbsp;				resp.setStatus(200);</b>
+<b class="nc"><i>101</i>&nbsp;				resp.setContentType(&quot;application/json&quot;);</b>
+<b class="nc"><i>102</i>&nbsp;				resp.setCharacterEncoding(&quot;UTF-8&quot;);</b>
+<b class="nc"><i>103</i>&nbsp;			}//End of fourth if statement</b>
+<i>104</i>&nbsp;			else {//Start of fourth else statement
+<b class="nc"><i>105</i>&nbsp;				resp.setStatus(400);</b>
+<i>106</i>&nbsp;			}//End of fourth else statement
+<b class="nc"><i>107</i>&nbsp;		} //End of third else if statement</b>
+<i>108</i>&nbsp;
+<b class="nc"><i>109</i>&nbsp;		else if(getType.trim().equalsIgnoreCase(&quot;active&quot;)) {//Start of fourth else if statement</b>
+<b class="nc"><i>110</i>&nbsp;            ObjectMapper om = new ObjectMapper();</b>
+<b class="nc"><i>111</i>&nbsp;            ArrayList&lt;Maintenance_Ticket&gt; tickets = sqlDatabaseMaintenance_ticket.findActive();</b>
+<b class="nc"><i>112</i>&nbsp;            if (tickets != null) {//Start of fifth if statement</b>
+<b class="nc"><i>113</i>&nbsp;                MaintenanceTicketWrapper ticketList = new MaintenanceTicketWrapper();</b>
+<b class="nc"><i>114</i>&nbsp;                ticketList.setTickets(tickets);</b>
+<b class="nc"><i>115</i>&nbsp;                String ticketsResponse = om.writeValueAsString(tickets);</b>
+<b class="nc"><i>116</i>&nbsp;                resp.getWriter().write(ticketsResponse);</b>
+<b class="nc"><i>117</i>&nbsp;                resp.setStatus(200);</b>
+<b class="nc"><i>118</i>&nbsp;                resp.setContentType(&quot;application/json&quot;);</b>
+<b class="nc"><i>119</i>&nbsp;                resp.setCharacterEncoding(&quot;UTF-8&quot;);</b>
+<b class="nc"><i>120</i>&nbsp;            }//End of fifth if statement</b>
+<i>121</i>&nbsp;            else {//Start of fifth else statement
+<b class="nc"><i>122</i>&nbsp;                resp.setStatus(400);</b>
+<i>123</i>&nbsp;            }//End of fifth else statement
+<b class="nc"><i>124</i>&nbsp;        }//End of fourth else if statement</b>
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;		else {//Start of first else statement
+<b class="nc"><i>127</i>&nbsp;			resp.setStatus(400);</b>
+<i>128</i>&nbsp;		}//End of first else statement
+<i>129</i>&nbsp;	}//End doGet method
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    /**
+<i>132</i>&nbsp;     * Not implemented
+<i>133</i>&nbsp;     * @param req
+<i>134</i>&nbsp;     * @param resp
+<i>135</i>&nbsp;     * @throws ServletException
+<i>136</i>&nbsp;     * @throws IOException
+<i>137</i>&nbsp;     */
+<i>138</i>&nbsp;      @Override
+<i>139</i>&nbsp;     protected void doHead(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+<b class="nc"><i>140</i>&nbsp;        super.doHead(req, resp);</b>
+<i>141</i>&nbsp;     }
+<i>142</i>&nbsp;
+<i>143</i>&nbsp;        /*
+<i>144</i>&nbsp;         * Requried JSON for addition
+<i>145</i>&nbsp;		{
+<i>146</i>&nbsp; 			&quot;attractionId&quot;:[Integer value],
+<i>147</i>&nbsp;  			&quot;employeeId&quot;: [Integer value],
+<i>148</i>&nbsp;			&quot;status&quot;:[String value],
+<i>149</i>&nbsp;			&quot;description&quot;:[String value]
+<i>150</i>&nbsp;			&quot;isActive&quot;:[boolean value]
+<i>151</i>&nbsp;			&quot;
+<i>152</i>&nbsp;		}
+<i>153</i>&nbsp;         */
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;    /**
+<i>156</i>&nbsp;     *
+<i>157</i>&nbsp;     * @param req
+<i>158</i>&nbsp;     * @param resp
+<i>159</i>&nbsp;     * @throws ServletException
+<i>160</i>&nbsp;     * @throws IOException
+<i>161</i>&nbsp;     */
+<i>162</i>&nbsp;     @Override
+<i>163</i>&nbsp;     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {//Start of doPost method
+<i>164</i>&nbsp;
+<b class="nc"><i>165</i>&nbsp;        if(req.getContentType().equals(&quot;application/json&quot;)) {//Start of first if statement</b>
+<b class="nc"><i>166</i>&nbsp;            SQLDatabaseMaintenance_Ticket sqlDatabaseMaintenance_ticket = new SQLDatabaseMaintenance_Ticket(new PostgresConnectionUtil());</b>
+<b class="nc"><i>167</i>&nbsp;            ObjectMapper om = new ObjectMapper();</b>
+<b class="nc"><i>168</i>&nbsp;            MaintenanceTicketTransfer ticketData = om.readValue(req.getReader(), MaintenanceTicketTransfer.class);</b>
+<b class="nc"><i>169</i>&nbsp;            int attractionId = ticketData.getAttractionId();</b>
+<b class="nc"><i>170</i>&nbsp;            String status = ticketData.getStatus();</b>
+<b class="nc"><i>171</i>&nbsp;            String description = ticketData.getDescription();</b>
+<b class="nc"><i>172</i>&nbsp;            int employeeId = ticketData.getEmployeeId();</b>
+<b class="nc"><i>173</i>&nbsp;            boolean isActive = ticketData.getIsActive();</b>
+<b class="nc"><i>174</i>&nbsp;            Maintenance_Ticket newTicket = new Maintenance_Ticket(attractionId, employeeId, status, description, isActive);</b>
+<b class="nc"><i>175</i>&nbsp;                if(!sqlDatabaseMaintenance_ticket.add(newTicket)) {//Start of second if statement</b>
+<b class="nc"><i>176</i>&nbsp;                    resp.setStatus(400);</b>
+<i>177</i>&nbsp;                }//End of second if statement
+<i>178</i>&nbsp;                else {//Start of second else statement
+<b class="nc"><i>179</i>&nbsp;                    resp.setStatus(201);</b>
+<i>180</i>&nbsp;                }//End of second else statement
+<b class="nc"><i>181</i>&nbsp;        }//End of first if statement</b>
+<i>182</i>&nbsp;        else {//Start of first else statement
+<b class="nc"><i>183</i>&nbsp;            resp.setStatus(400);</b>
+<i>184</i>&nbsp;        }//End of first else statement
+<i>185</i>&nbsp;     }//End of doPost method
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;       /*
+<i>188</i>&nbsp;        *  Required JSON for update
+<i>189</i>&nbsp;        * {
+<i>190</i>&nbsp;        *	 &quot;mainId&quot;:[Integer value],
+<i>191</i>&nbsp;        *	 &quot;status&quot;:[String value],
+<i>192</i>&nbsp;   	 	*	 &quot;endDate&quot;:[String value, format MM-dd-yyyy HH:mm]
+<i>193</i>&nbsp;   	 	*    &quot;isActive:[boolean value]
+<i>194</i>&nbsp;        * }
+<i>195</i>&nbsp;        */
+<i>196</i>&nbsp;
+<i>197</i>&nbsp;    /**
+<i>198</i>&nbsp;     *
+<i>199</i>&nbsp;     * @param req
+<i>200</i>&nbsp;     * @param resp
+<i>201</i>&nbsp;     * @throws ServletException
+<i>202</i>&nbsp;     * @throws IOException
+<i>203</i>&nbsp;     */
+<i>204</i>&nbsp;     @Override
+<i>205</i>&nbsp;     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{//Start of doPut method
+<b class="nc"><i>206</i>&nbsp;        if(req.getContentType().equals(&quot;application/json&quot;)) {//Start of first if statement</b>
+<b class="nc"><i>207</i>&nbsp;            ObjectMapper om = new ObjectMapper();</b>
+<b class="nc"><i>208</i>&nbsp;            MaintenanceTicketTransfer ticketData = om.readValue(req.getReader(), MaintenanceTicketTransfer.class);</b>
+<b class="nc"><i>209</i>&nbsp;            LocalDateTime endDate = LocalDateTime.parse(ticketData.getEndDate(), DateTimeFormatter.ofPattern(&quot;MM-dd-yyyy HH:mm&quot;));</b>
+<b class="nc"><i>210</i>&nbsp;            Maintenance_Ticket updateTicket = sqlDatabaseMaintenance_ticket.findByID(ticketData.getMainId());</b>
+<b class="nc"><i>211</i>&nbsp;                if(updateTicket != null) {//Start of second if statement</b>
+<b class="nc"><i>212</i>&nbsp;                    updateTicket.setEndDate(endDate);</b>
+<b class="nc"><i>213</i>&nbsp;                    updateTicket.setStatus(ticketData.getStatus());</b>
+<b class="nc"><i>214</i>&nbsp;                    sqlDatabaseMaintenance_ticket.update(updateTicket.getMainId(), updateTicket);</b>
+<b class="nc"><i>215</i>&nbsp;                    resp.setStatus(204);</b>
+<i>216</i>&nbsp;                }//End of second if statement
+<i>217</i>&nbsp;                else {//Start of second else statement
+<b class="nc"><i>218</i>&nbsp;                    resp.setStatus(400);</b>
+<i>219</i>&nbsp;                }//End of second else statement
+<b class="nc"><i>220</i>&nbsp;        }//End of first if statement</b>
+<i>221</i>&nbsp;        else {//Start of first else statement
+<b class="nc"><i>222</i>&nbsp;            resp.setStatus(400);</b>
+<i>223</i>&nbsp;        }//End of else statement
+<i>224</i>&nbsp;     }//End of doPut method
+<i>225</i>&nbsp;
+<i>226</i>&nbsp;    /**
+<i>227</i>&nbsp;     * Unimplemented doDelete
+<i>228</i>&nbsp;     * @param req
+<i>229</i>&nbsp;     * @param resp
+<i>230</i>&nbsp;     * @throws ServletException
+<i>231</i>&nbsp;     * @throws IOException
+<i>232</i>&nbsp;     */
+<i>233</i>&nbsp;     @Override
+<i>234</i>&nbsp;     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+<b class="nc"><i>235</i>&nbsp;        super.doDelete(req, resp);</b>
+<i>236</i>&nbsp;     }
+<i>237</i>&nbsp;
+<i>238</i>&nbsp;    /**
+<i>239</i>&nbsp;     * Unimplemented destroy
+<i>240</i>&nbsp;     */
+<i>241</i>&nbsp;    @Override
+<i>242</i>&nbsp;     public void destroy() {
+<b class="nc"><i>243</i>&nbsp;        super.destroy();</b>
+<i>244</i>&nbsp;     }
+<i>245</i>&nbsp;
+<i>246</i>&nbsp;    /**
+<i>247</i>&nbsp;     * Unimplemented init
+<i>248</i>&nbsp;     * @throws ServletException
+<i>249</i>&nbsp;     */
+<i>250</i>&nbsp;    @Override
+<i>251</i>&nbsp;     public void init() throws ServletException {
+<b class="nc"><i>252</i>&nbsp;        super.init();</b>
+<i>253</i>&nbsp;     }
+<i>254</i>&nbsp;}//End of MaintenanceTicketServlet
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 02:18</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Attraction.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Coaster_manager</a> &gt; <a href="index.source.html" class="el_package">models</a> &gt; <span class="el_source">Attraction.java</span></div><h1>Attraction.java</h1><pre class="source lang-java linenums">package models;
+
+/**
+ *  Project 2:&lt;br&gt;
+ * &lt;br&gt;
+ *  Attraction is used to model an Attraction object
+ *
+ *  &lt;br&gt; &lt;br&gt;
+ *  Created: &lt;br&gt;
+ *     May 11, 2020 Paityn Maynard&lt;br&gt;
+ *     With assistance from: &lt;br&gt;
+ *  Modifications: &lt;br&gt;
+ *
+ *      &lt;hr&gt;
+ *   Added toString for JSON RESPONSES
+ *      Jean Aldoph II
+ *      &lt;hr&gt;
+ *
+ * &lt;br&gt;
+ *  @author
+ *  @version 11 May 2020
+ *
+ */
+public class Attraction {//Start of Attractions class
+//Instance Variables
+    String name, status, imageurl;
+    int id, rating;
+
+//Constructors
+    public Attraction()
+<span class="fc" id="L31">    {</span>
+<span class="fc" id="L32">        this.status=null;</span>
+<span class="fc" id="L33">    }</span>
+
+    /**
+     * Used to create a new Attraction object
+     * @param name
+     * @param status
+     * @param imageurl
+     * @param id
+     * @param rating
+     */
+<span class="fc" id="L43">    public Attraction(String name, String status, String imageurl, int id, int rating){</span>
+<span class="fc" id="L44">        this.name=name;</span>
+<span class="fc" id="L45">        this.status=status;</span>
+<span class="fc" id="L46">        this.imageurl = imageurl;</span>
+<span class="fc" id="L47">        this.id=id;</span>
+<span class="fc" id="L48">        this.rating=rating;</span>
+<span class="fc" id="L49">    }</span>
+//Getters
+    public String getName() {
+<span class="nc" id="L52">        return name;</span>
+    }
+
+    public String getStatus() {
+<span class="fc" id="L56">        return status;</span>
+    }
+
+    public String getImageurl() {
+<span class="nc" id="L60">        return imageurl;</span>
+    }
+
+    public int getId() {
+<span class="fc" id="L64">        return id;</span>
+    }
+
+    public int getRating() {
+<span class="nc" id="L68">        return rating;</span>
+    }
+
+//Setters
+    public void setName(String name) {
+<span class="fc" id="L73">        this.name = name;</span>
+<span class="fc" id="L74">    }</span>
+
+    public void setStatus(String status) {
+<span class="fc" id="L77">        this.status = status;</span>
+<span class="fc" id="L78">    }</span>
+
+    public void setImageurl(String imageurl) {
+<span class="fc" id="L81">        this.imageurl = imageurl;</span>
+<span class="fc" id="L82">    }</span>
+
+    public void setId(int id) {
+<span class="fc" id="L85">        this.id = id;</span>
+<span class="fc" id="L86">    }</span>
+
+    public void setRating(int rating) {
+<span class="fc" id="L89">        this.rating = rating;</span>
+<span class="fc" id="L90">    }</span>
+
+    @Override
+    public String toString() {
+<span class="fc" id="L94">        return &quot;{name=&quot; +name+</span>
+                &quot;,status=&quot; +status+
+                &quot;,imageurl=&quot; +imageurl+
+                &quot;,id=&quot; +id+
+                &quot;,rating=&quot;+rating+'}';
+    }
+}//End of Attractions Class
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

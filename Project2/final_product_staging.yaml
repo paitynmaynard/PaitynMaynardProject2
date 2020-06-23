@@ -1,0 +1,91 @@
+#cm Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cm-deployment
+spec:
+  selector:
+    matchLabels:
+      app: Coaster_manager
+  template:
+    metadata:
+      labels:
+        app: Coaster_manager
+    spec:
+      containers:
+        - name: coasterm
+          image: jeanaldoph/voldemort:cmprime
+          ports:
+            - containerPort: 8080
+---
+#cc Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cc-deployment
+spec:
+  selector:
+    matchLabels:
+      app: Coaster_customer
+  template:
+    metadata:
+      labels:
+        app: Coaster_customer
+    spec:
+      containers:
+        - name: coasterc
+          image: jeanaldoph/voldemort:ccprime
+          ports:
+            - containerPort: 8080
+---
+#CM Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: c-m-service
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 8080 
+      nodePort: 31516 
+      protocol: TCP
+  selector:
+    app: Coaster_manager 
+---
+#CC Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: c-c-service
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 8080 
+      nodePort: 31515
+      protocol: TCP
+  selector:
+    app: Coaster_customer
+---
+#Ingress Layer
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: coaster-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+    - http:
+        paths:
+        - path: /coasters(/|$)(.*)
+          backend:
+            serviceName: c-c-service
+            servicePort: 8080
+        - path: /mgr(/|$)(.*)
+          backend:
+            serviceName: c-m-service
+            servicePort: 8080
+

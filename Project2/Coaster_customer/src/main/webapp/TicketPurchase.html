@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Purchase Ticket</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Ticket Purchase</h1>
+    <h3>Ticket Details</h3>
+    <label for="ticketAccessLevel">Access Level (Admission Tiers):</label>
+    <select id="ticketAccessLevel" name="ticketAccessLevel">
+        <option value="1">Basic - $15/day</option>
+        <option value="2">VIP - $20/day</option>
+        <option value="3">Super VIP - $30/day</option>
+    </select><br/>
+    <label for="ticketDays">Days:</label>
+    <select id="ticketDays" name="ticketDays">
+        <option value="1">1 Day</option>
+        <option value="2">2 Days</option>
+        <option value="3">3 Days</option>
+        <option value="4">4 Days</option>
+        <option value="5">5 Days</option>
+        <option value="6">6 Days</option>
+        <option value="7">1 Week</option>
+    </select><br/>
+    <h3>Family Pass</h3>
+    <p>2x Price, good for up to 4. (Children under 2 get free admittance.)</p>
+    <input type="radio" id="familyPassFalse" name="familyPass" value="1" onclick="calculateCost();">
+    <label for="familyPassFalse">No</label><br/>
+    <input type="radio" id="familyPassTrue" name="familyPass" value="2" onclick="calculateCost();">
+    <label for="familyPassTrue">Yes</label><br/>
+    <button id="submitTicket" type="submit">Submit</button>
+
+    <div>
+        <p><b>Total:</b></p>
+        <p id="total">$ --.--</p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelector('#submitTicket').addEventListener('click', (e) => {
+                e.preventDefault();
+
+                let custID = document.cookie.split(";"))[0].split("=")[1];
+                let custEmail = sessionStorage.getItem("em");
+
+                let ticketAccessLevelInput = document.getElementById('ticketAccessLevel');
+                //let accessLevel = ticketAccessLevelInput.value;
+
+                let ticketDaysInput = document.getElementById('ticketDays');
+                let ticketDays = Number(ticketDaysInput.value);
+
+                let startDateRaw = new Date();
+                let endDateRaw = new Date();
+                let newDateVal = (startDateRaw.getDate())+ticketDays;
+                endDateRaw.setDate(newDateVal);
+                console.log(ticketDays);
+                console.log(startDateRaw.getDate());
+                console.log(newDateVal);
+                console.log(startDateRaw);
+                console.log(endDateRaw);
+
+                let startMonth = startDateRaw.getMonth() + 1;
+                let startDay = startDateRaw.getDate();
+                let startYear = startDateRaw.getFullYear();
+                let startHour = startDateRaw.getHours();
+                let startMinute = startDateRaw.getMinutes();
+
+                if (startMonth < 10) {
+                    startMonth = "0"+startMonth;
+                }
+                if (startDay < 10) {
+                    startDay = "0"+startDay;
+                }
+                if (startHour < 10) {
+                    startHour = "0"+startHour;
+                }
+                if (startMinute < 10) {
+                    startMinute = "0"+startMinute;
+                }
+
+                let endMonth = endDateRaw.getMonth() + 1;
+                let endDay = endDateRaw.getDate();
+                let endYear = endDateRaw.getFullYear();
+                let endHour = endDateRaw.getHours();
+                let endMinute = endDateRaw.getMinutes();
+
+                if (endMonth < 10) {
+                    endMonth = "0"+endMonth;
+                }
+                if (endDay < 10) {
+                    endDay = "0"+endDay;
+                }
+                if (endHour < 10) {
+                    endHour = "0"+endHour;
+                }
+                if (endMinute < 10) {
+                    endMinute = "0"+endMinute;
+                }
+
+                let startDateFormatted = startMonth + "-" + startDay + "-" + startYear + " " + startHour + ":" + startMinute;
+                let endDateFormatted = endMonth + "-" + endDay + "-" + endYear + " " + endHour + ":" + endMinute;
+
+                console.log(startDateFormatted);
+                console.log(endDateFormatted);
+
+                let data = {
+                    customerID: custID,
+                    accessLevel: ticketAccessLevelInput.value,
+                    startDate: startDateFormatted,
+                    endDate: endDateFormatted
+                }
+                $.ajax({
+                    url: 'TicketServlet',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    mimeType: 'application/json',
+                    success: function (response) {
+                        window.alert("Ticket Created! Please make sure to mark down the date for when your ticket expires!");
+                        window.location.href = "#";
+                    }
+                })
+            });
+        })
+
+        function calculateCost() {
+            var accessLevel = Number(document.getElementById("ticketAccessLevel").value);
+            var accessLevelRate = 15 + (5*(accessLevel-1));
+            var daysRate = Number(document.getElementById("ticketDays").value);
+
+            // familyPassRate
+            var familyPassRateOption = 1; // default
+            if (document.getElementById('familyPassFalse').checked) {
+                familyPassRateOption = document.getElementById('familyPassFalse').value;
+            } else if (document.getElementById('familyPassTrue').checked) {
+                familyPassRateOption = document.getElementById('familyPassTrue').value;
+            }
+            var familyPassRate = Number(familyPassRateOption);
+
+            // Calculate total
+            var subtotal_value = accessLevelRate * daysRate * familyPassRate;
+            var total_value = subtotal_value * 1.06; // 6% tax
+
+            // Convert total into string with decimal values shown
+            var total_value_string = total_value.toFixed(2);
+
+            // Retrieve paragraph containing total
+            var total = document.getElementById("total");
+            total.innerHTML = "$ " + total_value_string;
+        }
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for(var i = 0; i <ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+          return "";
+        }
+
+        calculateCost(); // Perform initial calculation with default values
+    </script>
+</body>
+</html>

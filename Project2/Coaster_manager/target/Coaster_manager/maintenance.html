@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Voldemort's Maintenance Portal</title>
+    <meta author Paityn Maynard>
+    <meta creationDate May 22, 2020>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<h1>Voldemort's Maintenance Portal </h1><hr/>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">Voldemort's Rollercoaster Extravaganza</a>
+        </div>
+                <ul class="nav navbar-nav">
+                    <li class="nav-link"><a href="managerfront.html">Back to Main</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
+                </ul>
+    </div>
+</nav>
+<!--<nav>
+    <button onclick="managerfront.html">Back To Main</button>
+    <button onclick="createTicket.html">Create/Update Maintenance Ticket</button>
+</nav>-->
+<div class="container">
+    <h2>Maintenance Tickets</h2><!--First h2-->
+<!--    <form id="add" class="bg-light" >-->
+<!--        <input id="attractnumber" type="number" placeholder="Enter Attraction ID">-->
+<!--        <input id="empID" type="number" placeholder="Enter Employee ID">-->
+<!--        <input id="desc" type="text" placeholder="Enter Description">-->
+<!--        <button onclick="addTicket()">Add Ticket</button>-->
+<!--    </form>-->
+<!--    <br/>-->
+<!--    <form id="resolve" class="bg-light" >-->
+<!--        <input id="mainnumber" type="number" placeholder="Enter Maintenance Ticket ID">-->
+<!--        <input id="date" type="text" placeholder="MM-DD-YYYY HH:MM">-->
+<!--        <button onclick="resolveTicket()">Resolve Ticket</button>-->
+<!--    </form>-->
+    <span class="form-inline" name="tickets">
+                <label for="type-selector">Filter By</label>
+                <select id="type-selector" name="find" onchange="applyFilter(this.value)" autocomplete="off">
+                    <option value=""></option>
+                    <option value="active">Active</option>
+                    <option value="all">All</option>
+                    <option value="id">Main ID</option>
+                    <option value="attraction">Attraction ID</option>
+                </select>
+        </span>
+    <div id="maintenance"></div>
+    <div id="babydiv"></div>
+</div>
+
+</body><!--End of the body Tag-->
+<script src="maintenance.js"></script>
+
+
+</html>

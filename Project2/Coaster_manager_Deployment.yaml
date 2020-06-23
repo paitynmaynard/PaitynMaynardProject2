@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cm-deployment
+spec:
+  selector:
+    matchLabels:
+      app: Coaster_manager
+  template:
+    metadata:
+      labels:
+        app: Coaster_manager
+    spec:
+      containers:
+        - name: coasterm
+          image: jeanaldoph/voldemort:cm
+          ports:
+            - containerPort: 8080
+          env:
+            - name: REDIS_HOST
+              value: redis-clusterip
+            - name: REDIS_PORT
+              value: "6379"

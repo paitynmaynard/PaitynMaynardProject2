@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AttractionsServlet.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Coaster_manager</a> &gt; <a href="index.source.html" class="el_package">servlets</a> &gt; <span class="el_source">AttractionsServlet.java</span></div><h1>AttractionsServlet.java</h1><pre class="source lang-java linenums">package servlets;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import data.SQLDatabaseExtAttractions;
+import data.SQLDatabaseIntAttraction;
+import models.Attraction;
+import utils.PostgresConnectionUtil;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ *  Project 2:&lt;br&gt;
+ * &lt;br&gt;
+ *  IntAttractionServlet used for all API calls involving attractions for managers.
+ *  This servlet implements a doPost, d doGet, and a doDelete method
+ *
+ *  &lt;br&gt; &lt;br&gt;
+ *  Created: &lt;br&gt;
+ *     May 13, 2020 Paityn Maynard&lt;br&gt;
+ *     With assistance from: &lt;br&gt;
+ *  Modifications: &lt;br&gt;
+ *
+ * &lt;br&gt;
+ *  @author
+ *  @version 13 May 2020
+ *
+ */
+
+<span class="nc" id="L37">public class AttractionsServlet extends HttpServlet {</span>
+//Instance Variables
+    JsonObject data;
+
+//Methods
+
+    /**
+     * doGet method is used for the find methods of both the internal and external attractions to allow all or one attraction to be found
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {//Start of doGet method
+<span class="nc" id="L52">        String json = null;</span>
+<span class="nc" id="L53">        SQLDatabaseIntAttraction intAttract = new SQLDatabaseIntAttraction(new PostgresConnectionUtil());</span>
+<span class="nc" id="L54">        SQLDatabaseExtAttractions extAttract = new SQLDatabaseExtAttractions(new PostgresConnectionUtil());</span>
+
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if(req.getHeader(&quot;find&quot;).equals(&quot;id&quot;)){//Start of first if statement</span>
+<span class="nc" id="L57">            Attraction attraction = null;</span>
+<span class="nc" id="L58">            Map&lt;String,String&gt; options = new LinkedHashMap&lt;&gt;();</span>
+
+            try{//Start of first try
+<span class="nc" id="L61">                int id = req.getIntHeader(&quot;id&quot;);</span>
+                try {//Start of second try
+<span class="nc" id="L63">                    attraction = intAttract.findByID(id);</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">                    if (attraction == null) {//Start of second if statement</span>
+<span class="nc" id="L65">                        attraction = extAttract.findByID(id);</span>
+                    }//End of second if statement
+                }//End of second try
+<span class="nc" id="L68">                catch (Exception e){//Start of second catch</span>
+<span class="nc" id="L69">                    e.printStackTrace();</span>
+<span class="nc" id="L70">                }//End of second catch</span>
+
+<span class="nc" id="L72">                    options.put(&quot;name&quot;,(String.valueOf(attraction.getName())));</span>
+<span class="nc" id="L73">                    options.put(&quot;id&quot;,(String.valueOf(attraction.getId())));</span>
+<span class="nc" id="L74">                    options.put(&quot;rate&quot;,(String.valueOf(attraction.getRating())));</span>
+<span class="nc" id="L75">                    options.put(&quot;url&quot;,(String.valueOf(attraction.getImageurl())));</span>
+<span class="nc" id="L76">                    options.put(&quot;status&quot;,(String.valueOf(attraction.getStatus())));</span>
+<span class="nc" id="L77">                json = new Gson().toJson(options);</span>
+
+<span class="nc" id="L79">                resp.setContentType(&quot;application/json&quot;);</span>
+<span class="nc" id="L80">                resp.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="nc" id="L81">                resp.getWriter().write(json);</span>
+
+            }//End of first try
+
+<span class="nc" id="L85">            catch (Exception e){//Start of first catch</span>
+<span class="nc" id="L86">                e.printStackTrace();</span>
+<span class="nc" id="L87">            }//End of catch</span>
+
+<span class="nc" id="L89">        }//End of first if statement</span>
+
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        else if(req.getHeader(&quot;find&quot;).equals(&quot;all&quot;)){//Start of first else if statement</span>
+<span class="nc" id="L92">            List&lt;Attraction&gt; attractions = intAttract.findAll();</span>
+<span class="nc" id="L93">                attractions.addAll(extAttract.findAll());</span>
+<span class="nc" id="L94">            Map&lt;String, ArrayList&gt; options = new LinkedHashMap&lt;&gt;();</span>
+<span class="nc" id="L95">                options.put(&quot;attractions&quot;, (ArrayList) attractions);</span>
+<span class="nc" id="L96">            json = new Gson().toJson(options);</span>
+
+<span class="nc" id="L98">            resp.setContentType(&quot;application/json&quot;);</span>
+<span class="nc" id="L99">            resp.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="nc" id="L100">            resp.getWriter().write(json);</span>
+<span class="nc" id="L101">        }//End of first else if statement</span>
+
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        else if(req.getHeader(&quot;find&quot;).equals(&quot;internal&quot;)){//Start of second else if statement</span>
+<span class="nc" id="L104">            List&lt;Attraction&gt; attractions = intAttract.findAll();</span>
+<span class="nc" id="L105">            Map&lt;String, ArrayList&gt; options = new LinkedHashMap&lt;&gt;();</span>
+<span class="nc" id="L106">            options.put(&quot;attractions&quot;, (ArrayList) attractions);</span>
+<span class="nc" id="L107">            json = new Gson().toJson(options);</span>
+
+<span class="nc" id="L109">            resp.setContentType(&quot;application/json&quot;);</span>
+<span class="nc" id="L110">            resp.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="nc" id="L111">            resp.getWriter().write(json);</span>
+<span class="nc" id="L112">        }//End of second else if statement</span>
+
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        else if(req.getHeader(&quot;find&quot;).equals(&quot;external&quot;)){//Start of third else if statement</span>
+<span class="nc" id="L115">            List&lt;Attraction&gt; attractions = extAttract.findAll();</span>
+<span class="nc" id="L116">            Map&lt;String, ArrayList&gt; options = new LinkedHashMap&lt;&gt;();</span>
+<span class="nc" id="L117">            options.put(&quot;attractions&quot;, (ArrayList) attractions);</span>
+<span class="nc" id="L118">            json = new Gson().toJson(options);</span>
+
+<span class="nc" id="L120">            resp.setContentType(&quot;application/json&quot;);</span>
+<span class="nc" id="L121">            resp.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="nc" id="L122">            resp.getWriter().write(json);</span>
+        }//End of third else if statement
+<span class="nc" id="L124">    }//End of doGet method</span>
+
+    /**
+     *doPost method is used to add an attraction to the internal database table and remove it from the external database table
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {//Start of doPost method
+<span class="nc" id="L135">        SQLDatabaseIntAttraction intAttract = new SQLDatabaseIntAttraction(new PostgresConnectionUtil());</span>
+<span class="nc" id="L136">        SQLDatabaseExtAttractions extAttract = new SQLDatabaseExtAttractions(new PostgresConnectionUtil());</span>
+<span class="nc" id="L137">        data = new Gson().fromJson(req.getReader(), JsonObject.class);</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        if(!(data.get(&quot;add&quot;) ==null)) {//Start of first if statement</span>
+<span class="nc" id="L139">            String json = null;</span>
+
+            try {//Start of try statement
+<span class="nc" id="L142">                int id = data.get(&quot;id&quot;).getAsInt();</span>
+<span class="nc" id="L143">                    Attraction attraction = extAttract.findByID(id);</span>
+<span class="nc" id="L144">                System.out.println(attraction);</span>
+
+<span class="nc bnc" id="L146" title="All 2 branches missed.">                if (intAttract.add(attraction)){//Start of if statement</span>
+<span class="nc" id="L147">                    extAttract.remove(id);</span>
+<span class="nc" id="L148">                    Map&lt;String,String&gt; options = new LinkedHashMap&lt;&gt;();</span>
+<span class="nc" id="L149">                    options.put(&quot;name&quot;,(String.valueOf(attraction.getName())));</span>
+<span class="nc" id="L150">                    options.put(&quot;id&quot;,(String.valueOf(attraction.getId())));</span>
+<span class="nc" id="L151">                    options.put(&quot;rate&quot;,(String.valueOf(attraction.getRating())));</span>
+<span class="nc" id="L152">                    options.put(&quot;url&quot;,(String.valueOf(attraction.getImageurl())));</span>
+<span class="nc" id="L153">                    options.put(&quot;status&quot;,(String.valueOf(attraction.getStatus())));</span>
+
+<span class="nc" id="L155">                    json = new Gson().toJson(options);</span>
+<span class="nc" id="L156">                    resp.setContentType(&quot;application/json&quot;);</span>
+<span class="nc" id="L157">                    resp.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="nc" id="L158">                    resp.getWriter().write(json);</span>
+<span class="nc" id="L159">                }//End of if statement</span>
+                else{//Start of else statement
+<span class="nc" id="L161">                        resp.getWriter().write(&quot;Couldn't add item&quot;);</span>
+                    }//End of else statement
+            }//End of try statement
+
+<span class="nc" id="L165">            catch (Exception e){//Start of catch statement</span>
+<span class="nc" id="L166">                e.printStackTrace();</span>
+<span class="nc" id="L167">            }//End of catch statement</span>
+
+        }//End of first if statement
+
+        else{//Start of first else statement
+
+        }//End of first else statement
+<span class="nc" id="L174">    }//End of doPost method</span>
+
+    /**
+     * doDelete method is used to remove an attraction fro
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {//Start of doDelete method
+<span class="nc" id="L185">        data = new Gson().fromJson(req.getReader(), JsonObject.class);</span>
+
+<span class="nc bnc" id="L187" title="All 2 branches missed.">        if(!(data.get(&quot;delete&quot;) ==null)){//Start of first if statement</span>
+<span class="nc" id="L188">            String json = null;</span>
+            try {//Start of try statement
+<span class="nc" id="L190">                int id = data.get(&quot;id&quot;).getAsInt();</span>
+
+<span class="nc" id="L192">                SQLDatabaseIntAttraction intAttract = new SQLDatabaseIntAttraction(new PostgresConnectionUtil());</span>
+<span class="nc" id="L193">                SQLDatabaseExtAttractions extAttract = new SQLDatabaseExtAttractions(new PostgresConnectionUtil());</span>
+<span class="nc" id="L194">                    Attraction attraction = intAttract.findByID(id);</span>
+<span class="nc" id="L195">                        extAttract.add(attraction);</span>
+<span class="nc" id="L196">                        intAttract.remove(id);</span>
+
+<span class="nc" id="L198">                Map&lt;String,String&gt; options = new LinkedHashMap&lt;&gt;();</span>
+<span class="nc" id="L199">                options.put(&quot;name&quot;,(String.valueOf(attraction.getName())));</span>
+<span class="nc" id="L200">                options.put(&quot;id&quot;,(String.valueOf(attraction.getId())));</span>
+<span class="nc" id="L201">                options.put(&quot;rate&quot;,(String.valueOf(attraction.getRating())));</span>
+<span class="nc" id="L202">                options.put(&quot;url&quot;,(String.valueOf(attraction.getImageurl())));</span>
+<span class="nc" id="L203">                options.put(&quot;status&quot;,(String.valueOf(attraction.getStatus())));</span>
+
+<span class="nc" id="L205">                json = new Gson().toJson(options);</span>
+<span class="nc" id="L206">                resp.setContentType(&quot;application/json&quot;);</span>
+<span class="nc" id="L207">                resp.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="nc" id="L208">                resp.getWriter().write(json);</span>
+            }//End of try statement
+
+<span class="nc" id="L211">            catch (Exception e){//Start of catch statement</span>
+<span class="nc" id="L212">                e.printStackTrace();</span>
+<span class="nc" id="L213">            }//End of catch statement</span>
+        }//End of first if statement
+
+        else {//Start of first else statement
+
+        }//End of first else statement
+<span class="nc" id="L219">    }//End of doDelete method</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

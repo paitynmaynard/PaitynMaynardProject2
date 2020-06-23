@@ -1,0 +1,150 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GenerationMessages</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">dao</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GenerationMessages (dao)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GenerationMessages</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package dao;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import models.Customer;
+<i>4</i>&nbsp;import models.Ticket;
+<i>5</i>&nbsp;import redis.clients.jedis.Jedis;
+<i>6</i>&nbsp;import redis.clients.jedis.JedisPubSub;
+<i>7</i>&nbsp;import utils.PostgresConnectionUtil;
+<i>8</i>&nbsp;import java.time.LocalDate;
+<i>9</i>&nbsp;import java.time.LocalDateTime;
+<i>10</i>&nbsp;import java.util.Random;
+<i>11</i>&nbsp;
+<b class="nc"><i>12</i>&nbsp;public class GenerationMessages {</b>
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    public static void events(String id, Integer number)
+<i>15</i>&nbsp;    {
+<b class="nc"><i>16</i>&nbsp;        CustomerDAO og = new CustomerDAO(new PostgresConnectionUtil());</b>
+<b class="nc"><i>17</i>&nbsp;        System.out.println(&quot;GOT A MESSAGE&quot;);</b>
+<b class="nc"><i>18</i>&nbsp;        Random rand = new Random();</b>
+<b class="nc"><i>19</i>&nbsp;        int randomMonth = rand.nextInt(12);</b>
+<b class="nc"><i>20</i>&nbsp;        if (randomMonth &lt; 6) randomMonth = 6;</b>
+<b class="nc"><i>21</i>&nbsp;        int randomDay = rand.nextInt(30);</b>
+<b class="nc"><i>22</i>&nbsp;        int randomStay = rand.nextInt(21);</b>
+<b class="nc"><i>23</i>&nbsp;        LocalDateTime ldt = LocalDateTime.now();</b>
+<b class="nc"><i>24</i>&nbsp;        ldt.plusMonths(randomMonth);</b>
+<b class="nc"><i>25</i>&nbsp;        ldt.plusDays(randomDay);</b>
+<b class="nc"><i>26</i>&nbsp;        Customer c = og.findById(id);</b>
+<b class="nc"><i>27</i>&nbsp;        TicketDAO tickets = new TicketDAO(new PostgresConnectionUtil());</b>
+<b class="nc"><i>28</i>&nbsp;        for (int i = 0; i &lt; number; i++)</b>
+<i>29</i>&nbsp;        {
+<b class="nc"><i>30</i>&nbsp;            tickets.save(new Ticket(c.getCustomerID(), rand.nextInt(3), ldt, ldt.plusDays(randomStay)));</b>
+<i>31</i>&nbsp;        }
+<b class="nc"><i>32</i>&nbsp;        System.out.println(String.format(&quot;Ticket Generation Event:\n&quot; +</b>
+<i>33</i>&nbsp;                &quot;Created: %d tickets \n&quot; +
+<b class="nc"><i>34</i>&nbsp;                &quot;for customer: %s&quot;, number, c.getEmail()));</b>
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;//        Jedis jedis = new Jedis(&quot;redis-clusterip&quot;, 6379);
+<i>38</i>&nbsp;//
+<i>39</i>&nbsp;//        jedis.subscribe(new JedisPubSub() {
+<i>40</i>&nbsp;//            @Override
+<i>41</i>&nbsp;//            public void onMessage(String channel, String message)
+<i>42</i>&nbsp;//            {
+<i>43</i>&nbsp;//                Random rand = new Random();
+<i>44</i>&nbsp;//                int randomMonth = rand.nextInt(12);
+<i>45</i>&nbsp;//                if (randomMonth &lt; 6) randomMonth = 6;
+<i>46</i>&nbsp;//                int randomDay = rand.nextInt(30);
+<i>47</i>&nbsp;//                int randomStay = rand.nextInt(21);
+<i>48</i>&nbsp;//                LocalDateTime ldt = LocalDateTime.now();
+<i>49</i>&nbsp;//                ldt.plusMonths(randomMonth);
+<i>50</i>&nbsp;//                ldt.plusDays(randomDay);
+<i>51</i>&nbsp;//                String[] split = message.split(&quot;!&quot;);
+<i>52</i>&nbsp;//                int numberOfTickets = new Integer(split[5]);
+<i>53</i>&nbsp;//                Customer c = new Customer(new Integer(split[0]),split[1],split[2],split[3],split[4]);
+<i>54</i>&nbsp;//                TicketDAO tickets = new TicketDAO(new PostgresConnectionUtil());
+<i>55</i>&nbsp;//
+<i>56</i>&nbsp;//                for (int i = 0; i &lt; numberOfTickets; i++)
+<i>57</i>&nbsp;//                {
+<i>58</i>&nbsp;//                    tickets.save(new Ticket(c.getCustomerID(), rand.nextInt(3), ldt, ldt.plusDays(randomStay)));
+<i>59</i>&nbsp;//                }
+<i>60</i>&nbsp;//                System.out.println(String.format(&quot;Ticket Generation Event:\n&quot; +
+<i>61</i>&nbsp;//                        &quot;Created: %d tickets \n&quot; +
+<i>62</i>&nbsp;//                        &quot;for customer: %s&quot;, numberOfTickets, c.getEmail()));
+<i>63</i>&nbsp;//            }
+<i>64</i>&nbsp;//        }, &quot;TicketGeneration&quot;);
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 02:18</div>
+</div>
+</body>
+</html>

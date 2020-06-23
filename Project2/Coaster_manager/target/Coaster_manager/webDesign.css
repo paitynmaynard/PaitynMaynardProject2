@@ -1,0 +1,18 @@
+.attraction-list li {
+   list-style: none;
+   padding-left: 0%;
+
+}
+.attraction-list ul {
+   padding-left: 0%;
+}
+
+#managerview > ul {
+   columns: 2 auto;
+}
+
+.attraction-listing {
+   margin: 20px 5px;
+   break-inside: avoid-column;
+   display: table;
+}

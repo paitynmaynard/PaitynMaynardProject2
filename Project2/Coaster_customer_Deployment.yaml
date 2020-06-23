@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cc-deployment
+spec:
+  selector:
+    matchLabels:
+      app: Coaster_customer
+  template:
+    metadata:
+      labels:
+        app: Coaster_customer
+    spec:
+      containers:
+        - name: coasterc
+          image: jeanaldoph/voldemort:cc
+          ports:
+            - containerPort: 8080
+

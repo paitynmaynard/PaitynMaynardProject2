@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Voldemort's Rollercoaster Extravaganza</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<h1>Voldemort's Employee Login </h1><hr/>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">Voldemort's Rollercoaster Extravaganza</a>
+        </div>
+        <!--<ul class="nav navbar-nav">
+            <li class="active"><a href="">Home</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Log In</a></li>
+        </ul>-->
+    </div>
+</nav>
+
+<div class="container">
+    <form class="bg-light" >
+        <div id="empId_group">
+            <label for="empId">Employee ID:</label>
+            <input id="empId" required type="text" name="empId" class="form-control" placeholder="Enter Employee ID"/>
+        </div>
+        <div id=pass_group">
+            <label for="password">Password:</label>
+            <input id="password" required type="password" name="password" class="form-control" placeholder="Enter password"/>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox"> Remember me
+            </label>
+        </div>
+        <div id="btn_group">
+            <button id="login" class="btn-dark" type="button" onclick="loginCall()">Log in</button>
+        </div>
+    </form>
+</div>
+<script src="managerlogin.js"></script>
+</body>
+</html>

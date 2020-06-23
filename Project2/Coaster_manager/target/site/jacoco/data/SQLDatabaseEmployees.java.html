@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SQLDatabaseEmployees.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Coaster_manager</a> &gt; <a href="index.source.html" class="el_package">data</a> &gt; <span class="el_source">SQLDatabaseEmployees.java</span></div><h1>SQLDatabaseEmployees.java</h1><pre class="source lang-java linenums">package data;
+
+import models.Employee;
+import utils.ConnectionUtil;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+
+/**
+ * Project 2
+ * SQLDatabaseEmployees class
+ * @author Reginald Jefferson
+ * @version 05/11/2020
+ * Modifications: Paityn Maynard updated methods to included pword - May 14&lt;br/&gt;
+ * Paityn Maynard- updated findAll method added line employees = new ArrayList&lt;&gt;()- May 15&lt;/br&gt;
+ *                 - added where statement to String sql and changed while(rs.next()) to if(rs.next())in findById.&lt;br/&gt;
+ * Reginald Jefferson -removed paramenter (sql) in findbyID - ResultSet rs = statement.executeQuery();&lt;br/&gt;
+ *                    -updated sql statement for adding employing by removing need to include employeeID.&lt;br/&gt;
+ */
+public class SQLDatabaseEmployees implements GenericDAO&lt;Employee,Integer&gt; {//Start of SQLDatabaseEmployees Class
+//Instance Variables
+    private ConnectionUtil connectionUtil;
+    static final String TABLE = &quot;.employees&quot;;
+    private String schemaName;
+<span class="fc" id="L29">    Connection connection = null;</span>
+
+//Constructors
+    /**
+     * @param connectionUtil
+     */
+<span class="fc" id="L35">    public SQLDatabaseEmployees(ConnectionUtil connectionUtil) {</span>
+<span class="fc" id="L36">        this.schemaName = &quot;project2&quot;;</span>
+<span class="fc" id="L37">        this.connectionUtil = connectionUtil;</span>
+<span class="fc" id="L38">    }</span>
+
+//Methods
+    /**
+     * Finds and returns all objects
+     *
+     * @return a list of all objects, or &lt;code&gt;null&lt;/code&gt; if an error occurred while retrieving
+     * those objects from the database.
+     */
+    @Override
+    public List&lt;Employee&gt; findAll() {//Start of findAll method
+<span class="fc" id="L49">        List&lt;Employee&gt; employees = null;</span>
+<span class="fc" id="L50">        String schemaName = connectionUtil.getDefaultSchema();</span>
+
+
+        try {//Start of try
+<span class="fc" id="L54">            employees=new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L55">            connection = connectionUtil.getConnection();</span>
+<span class="fc" id="L56">            String sql = &quot;SELECT * FROM &quot; /*firstname, lastname, phonenumber, emailaddress, pword employeeid, bossid, admin*/</span>
+                    + schemaName + TABLE;
+<span class="fc" id="L58">            PreparedStatement statement = connection.prepareStatement(sql);</span>
+<span class="fc" id="L59">            ResultSet rs = statement.executeQuery();</span>
+
+<span class="fc bfc" id="L61" title="All 2 branches covered.">            while(rs.next()) {//Start of while loop</span>
+<span class="fc" id="L62">                int id = rs.getInt(&quot;employeeid&quot;);</span>
+<span class="fc" id="L63">                String firstName = rs.getString(&quot;firstname&quot;);</span>
+<span class="fc" id="L64">                String lastName = rs.getString(&quot;lastname&quot;);</span>
+<span class="fc" id="L65">                String phoneNum = rs.getString(&quot;phonenumber&quot;);</span>
+<span class="fc" id="L66">                String email = rs.getString(&quot;emailaddress&quot;);</span>
+<span class="fc" id="L67">                String pword = rs.getString(&quot;pword&quot;);</span>
+<span class="fc" id="L68">                int bossid = rs.getInt(&quot;bossid&quot;);</span>
+<span class="fc" id="L69">                Boolean admin = rs.getBoolean(&quot;admin&quot;);</span>
+
+<span class="fc" id="L71">                employees.add(new Employee(firstName, lastName, phoneNum, email, id, pword, bossid, admin));</span>
+<span class="fc" id="L72">            }//End of while loop</span>
+        }//End of try
+<span class="fc" id="L74">        catch (SQLException throwables) {//Start of catch</span>
+<span class="fc" id="L75">            throwables.printStackTrace();</span>
+<span class="fc" id="L76">        }//End of catch</span>
+<span class="fc" id="L77">        return employees;</span>
+    }//End of findAll method
+
+    /**
+     * Adds a new object to the database.
+     *
+     * @param newObj The object to be added
+     * @return &lt;code&gt;true&lt;/code&gt; if the object was successfully added, &lt;code&gt;false&lt;/code&gt; otherwise.
+     */
+    @Override
+    public boolean add(Employee newObj) {//Start of add method
+<span class="fc" id="L88">        String schemaName = connectionUtil.getDefaultSchema();</span>
+<span class="fc" id="L89">        int rowsAdded = 0;</span>
+        try {//Start of try
+<span class="fc" id="L91">            connection = connectionUtil.getConnection();</span>
+<span class="fc" id="L92">            String sql = &quot;INSERT into &quot; + schemaName + TABLE +</span>
+                    &quot;(firstname, lastname, phonenumber, emailaddress, pword, bossid, admin) VALUES (?,?,?,?,?,?,?)&quot;;
+<span class="fc" id="L94">            PreparedStatement statement = connection.prepareStatement(sql);</span>
+
+<span class="fc" id="L96">            statement.setString(1, newObj.getFname());</span>
+<span class="fc" id="L97">            statement.setString(2,newObj.getLname());</span>
+<span class="fc" id="L98">            statement.setString(3, newObj.getPhoneNum());</span>
+<span class="fc" id="L99">            statement.setString(4, newObj.getEmail());</span>
+<span class="fc" id="L100">            statement.setString(5,newObj.getPword());</span>
+<span class="fc" id="L101">            statement.setInt(6, newObj.getBossid());</span>
+<span class="fc" id="L102">            statement.setBoolean(7, newObj.isAdmin());</span>
+
+<span class="fc" id="L104">            rowsAdded = statement.executeUpdate();</span>
+        }//End of try
+<span class="fc" id="L106">        catch (SQLException throwables) {//Start of catch</span>
+<span class="fc" id="L107">            throwables.printStackTrace();</span>
+<span class="fc" id="L108">        }//End of catch</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        return rowsAdded == 1;</span>
+    }//End of add method
+
+    /**
+     * Finds and returns the object with the specified ID.
+     *
+     * @param integer the ID of the object to find
+     * @return the object with that ID, or &lt;code&gt;null&lt;/code&gt; if such an object could not be found.
+     */
+    @Override
+    public Employee findByID(Integer integer) {//Start of findByID
+<span class="fc" id="L120">        String schemaName = connectionUtil.getDefaultSchema();</span>
+<span class="fc" id="L121">        Employee employee = null;</span>
+
+<span class="fc" id="L123">        String sql = &quot;SELECT employeeid, firstname, lastname, phonenumber, emailaddress, pword, bossid FROM &quot;</span>
+                + schemaName + TABLE +&quot; WHERE employeeid = ?&quot;;
+        try {//Start of try
+<span class="fc" id="L126">            connection = connectionUtil.getConnection();</span>
+<span class="fc" id="L127">            PreparedStatement statement = connection.prepareStatement(sql);</span>
+<span class="fc" id="L128">                statement.setInt(1, integer);</span>
+<span class="fc" id="L129">            ResultSet rs = statement.executeQuery();</span>
+
+<span class="fc bfc" id="L131" title="All 2 branches covered.">           if(rs.next()) {//Start of if statement</span>
+<span class="fc" id="L132">               employee= new Employee();</span>
+<span class="fc" id="L133">                employee.setId(rs.getInt(&quot;employeeid&quot;));</span>
+<span class="fc" id="L134">                employee.setFname(rs.getString(&quot;firstname&quot;));</span>
+<span class="fc" id="L135">                employee.setLname(rs.getString(&quot;lastname&quot;));</span>
+<span class="fc" id="L136">                employee.setPhoneNum(rs.getString(&quot;phonenumber&quot;));</span>
+<span class="fc" id="L137">                employee.setEmail(rs.getString(&quot;emailaddress&quot;));</span>
+<span class="fc" id="L138">                employee.setPword(rs.getString(&quot;pword&quot;));</span>
+<span class="fc" id="L139">                employee.setBossid(rs.getInt(&quot;bossid&quot;));</span>
+            }//End of if statement
+        }//End of try
+<span class="nc" id="L142">        catch (SQLException throwables) {//Start of catch</span>
+<span class="nc" id="L143">            throwables.printStackTrace();</span>
+<span class="fc" id="L144">        }//End of catch</span>
+<span class="fc" id="L145">        return employee;</span>
+    }//End of findById method
+
+    /**
+     * Updates the object with the specified ID.
+     *
+     * @param integer the ID of the object to be updated
+     * @param newObj  the new object that will replace the existing object in the database
+     * @return &lt;code&gt;true&lt;/code&gt; if an update occurred successfully, &lt;code&gt;false&lt;/code&gt; otherwise.
+     */
+    @Override
+    public boolean update(Integer integer, Employee newObj) {//Start of update method
+<span class="fc" id="L157">        String schemaName = connectionUtil.getDefaultSchema();</span>
+<span class="fc" id="L158">        int rowsUpdated = 0;</span>
+        try {//Start of try
+<span class="fc" id="L160">            connection = connectionUtil.getConnection();</span>
+<span class="fc" id="L161">            String sql = &quot;UPDATE &quot; + schemaName + TABLE +</span>
+                    &quot; SET firstname=?, lastname=?, phonenumber=?, emailaddress=?, pword=?, admin=? WHERE employeeid=?&quot;;
+<span class="fc" id="L163">            PreparedStatement statement = connection.prepareStatement(sql);</span>
+
+<span class="fc" id="L165">            statement.setString(1, newObj.getFname());</span>
+<span class="fc" id="L166">            statement.setString(2, newObj.getLname());</span>
+<span class="fc" id="L167">            statement.setString(3, newObj.getPhoneNum());</span>
+<span class="fc" id="L168">            statement.setString(4, newObj.getEmail());</span>
+<span class="fc" id="L169">            statement.setString(5,newObj.getPword());</span>
+<span class="fc" id="L170">            statement.setBoolean(6, newObj.isAdmin());</span>
+<span class="fc" id="L171">            statement.setInt(7, newObj.getId());</span>
+
+<span class="fc" id="L173">            rowsUpdated = statement.executeUpdate();</span>
+
+        }//End of try
+<span class="nc" id="L176">        catch (SQLException throwables) {//Start of catch</span>
+<span class="nc" id="L177">            throwables.printStackTrace();</span>
+<span class="fc" id="L178">        }//End of catch</span>
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">        return rowsUpdated &gt; 0;</span>
+    }//End of update method
+
+    /**
+     * Removes unused in this class
+     * This method returns &lt;code&gt;true&lt;/code&gt; even if that object does not exist in the database
+     * (and hence there is nothing to remove).
+     *
+     * @param integer the ID of the object to remove
+     * @return &lt;code&gt;true&lt;/code&gt; if the deletion was successful, &lt;code&gt;false&lt;/code&gt; otherwise.
+     */
+    @Override
+    public boolean remove(Integer integer) {//Start of remove method
+<span class="fc" id="L192">        String schemaName = connectionUtil.getDefaultSchema();</span>
+<span class="fc" id="L193">        int rowsDeleted = 0;</span>
+        try {//Start of try
+<span class="fc" id="L195">            connection = connectionUtil.getConnection();</span>
+<span class="fc" id="L196">            String sql = &quot;DELETE FROM &quot; + schemaName + TABLE + &quot; WHERE employeeid=?&quot;;</span>
+<span class="fc" id="L197">            PreparedStatement statement = connection.prepareStatement(sql);</span>
+<span class="fc" id="L198">            statement.setInt(1, integer);</span>
+
+<span class="fc" id="L200">            rowsDeleted = statement.executeUpdate();</span>
+        }//End of try
+<span class="nc" id="L202">        catch (SQLException throwables) {//Start of catch</span>
+<span class="nc" id="L203">            throwables.printStackTrace();</span>
+<span class="fc" id="L204">        }//End of catch</span>
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">        return rowsDeleted != 0;</span>
+    }//End of remove method
+}//End of SQLDatabaseEmployees Class
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

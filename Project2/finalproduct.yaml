@@ -1,0 +1,134 @@
+#cm Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cm-deployment
+spec:
+  selector:
+    matchLabels:
+      app: Coaster_manager
+  template:
+    metadata:
+      labels:
+        app: Coaster_manager
+    spec:
+      containers:
+        - name: coasterm
+          image: jeanaldoph/voldemort:cm
+          ports:
+            - containerPort: 8080
+          env:
+            - name: REDIS_HOST
+              value: redis-clusterip
+            - name: REDIS_PORT
+              value: "6379"
+---
+#cc Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cc-deployment
+spec:
+  selector:
+    matchLabels:
+      app: Coaster_customer
+  template:
+    metadata:
+      labels:
+        app: Coaster_customer
+    spec:
+      containers:
+        - name: coasterc
+          image: jeanaldoph/voldemort:cc
+          ports:
+            - containerPort: 8080
+---
+#CM Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: c-m-service
+spec:
+  type: NodePort
+  ports:
+    - port: 80 # used by other pods
+      targetPort: 8080 # port exposed on the container
+      nodePort: 31516 # used to access from the outside
+      protocol: TCP
+  selector:
+    app: Coaster_manager 
+---
+#CC Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: c-c-service
+spec:
+  type: NodePort
+  ports:
+    - port: 80 # used by other pods
+      targetPort: 8080 # port exposed on the container
+      nodePort: 31515 # used to access from the outside
+      protocol: TCP
+  selector:
+    app: Coaster_customer
+---
+#Ingress Layer
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: coaster-ingress
+  annotations:
+   # kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+    - http:
+        paths:
+        - path: /coasters(/|$)(.*)
+          backend:
+            serviceName: c-c-service
+            servicePort: 8080
+        - path: /mgr(/|$)(.*)
+          backend:
+            serviceName: c-m-service
+            servicePort: 8080
+---
+#Redis ClusterIP            
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-clusterip
+spec:
+  selector:
+    app: redis
+  type: ClusterIP
+  ports:
+    - port: 6379
+      targetPort: 6379
+---
+#Redis Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
+          ports:
+            - containerPort: 6379
+
+

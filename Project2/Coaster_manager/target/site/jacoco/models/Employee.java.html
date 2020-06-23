@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Employee.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Coaster_manager</a> &gt; <a href="index.source.html" class="el_package">models</a> &gt; <span class="el_source">Employee.java</span></div><h1>Employee.java</h1><pre class="source lang-java linenums">package models;
+
+/**
+ *  Project 2:&lt;br&gt;
+ * &lt;br&gt;
+ *  Employee is used to model an Employee Model
+ *
+ *  &lt;br&gt; &lt;br&gt;
+ *  Created: &lt;br&gt;
+ *     May 11, 2020 Paityn Maynard&lt;br&gt;
+ *     With assistance from: &lt;br&gt;
+ *  Modifications: &lt;br&gt;
+ *       &lt;hr&gt;
+ *     Added toString for JSON RESPONSES
+ *        Jean Aldoph II
+ *        &lt;hr&gt;
+ *     &lt;hr&gt;
+ *         Added Constructors 2,3,4
+ *     &lt;hr&gt;
+ * &lt;br&gt;
+ *  @author
+ *  @version 11 May 2020
+ */
+public class Employee {//Start of Employees Class
+//Instance Variables
+    String fname, lname, phoneNum, email, pword;
+    int id, bossid;
+    float payRate;
+    boolean yearlyRate,isAdmin;
+
+//Constructors
+<span class="fc" id="L32">    public Employee(){}</span>
+
+    /**
+     * Used to create a new Employee object
+     * @param fname
+     * @param lname
+     * @param phoneNum
+     * @param email
+     * @param pword
+     * @param id
+     * @param bossid
+     * @param isAdmin
+     */
+<span class="fc" id="L45">    public Employee(String fname, String lname, String phoneNum, String email,  int id, String pword, int bossid, boolean isAdmin ){//This is a constructors for Employees Constructor 1</span>
+<span class="fc" id="L46">        this.fname=fname;</span>
+<span class="fc" id="L47">        this.lname=lname;</span>
+<span class="fc" id="L48">        this.phoneNum=phoneNum;</span>
+<span class="fc" id="L49">        this.email=email;</span>
+<span class="fc" id="L50">        this.pword=pword;</span>
+<span class="fc" id="L51">        this.id=id;</span>
+<span class="fc" id="L52">        this.bossid=bossid;</span>
+<span class="fc" id="L53">        this.isAdmin=isAdmin;</span>
+<span class="fc" id="L54">    }</span>
+
+    /**
+     * @param fname
+     * @param lname
+     * @param phoneNum
+     * @param email
+     * @param id
+     * @param pword
+     * @param isAdmin
+     */
+<span class="nc" id="L65">    public Employee(String fname, String lname, String phoneNum, String email, int id, String pword, boolean isAdmin){//This is a constructors for Admin Constructor 2</span>
+<span class="nc" id="L66">        this.fname=fname;</span>
+<span class="nc" id="L67">        this.lname=lname;</span>
+<span class="nc" id="L68">        this.phoneNum=phoneNum;</span>
+<span class="nc" id="L69">        this.email=email;</span>
+<span class="nc" id="L70">        this.pword=pword;</span>
+<span class="nc" id="L71">        this.id=id;</span>
+<span class="nc" id="L72">        this.isAdmin=isAdmin;</span>
+<span class="nc" id="L73">    }</span>
+
+    /**
+      * @param fname
+     * @param lname
+     * @param phoneNum
+     * @param email
+     * @param pword
+     * @param bossid
+     * @param isAdmin
+     */
+<span class="fc" id="L84">    public Employee(String fname, String lname, String phoneNum, String email, String pword, int bossid, boolean isAdmin){//This is a constructors for Employees Constructor 3</span>
+<span class="fc" id="L85">        this.fname=fname;</span>
+<span class="fc" id="L86">        this.lname=lname;</span>
+<span class="fc" id="L87">        this.phoneNum=phoneNum;</span>
+<span class="fc" id="L88">        this.email=email;</span>
+<span class="fc" id="L89">        this.pword=pword;</span>
+<span class="fc" id="L90">        this.bossid=bossid;</span>
+<span class="fc" id="L91">        this.isAdmin=isAdmin;</span>
+<span class="fc" id="L92">    }</span>
+
+    /**
+     * @param fname
+     * @param lname
+     * @param phoneNum
+     * @param email
+     * @param pword
+     * @param isAdmin
+     */
+<span class="nc" id="L102">    public Employee(String fname, String lname, String phoneNum, String email, String pword, boolean isAdmin ){//This is a constructors for Employees Constructor 4</span>
+<span class="nc" id="L103">        this.fname=fname;</span>
+<span class="nc" id="L104">        this.lname=lname;</span>
+<span class="nc" id="L105">        this.phoneNum=phoneNum;</span>
+<span class="nc" id="L106">        this.email=email;</span>
+<span class="nc" id="L107">        this.pword=pword;</span>
+<span class="nc" id="L108">        this.isAdmin=isAdmin;</span>
+<span class="nc" id="L109">    }</span>
+//Getters
+    public String getFname() {
+<span class="fc" id="L112">        return fname;</span>
+    }
+
+    public String getLname() {
+<span class="fc" id="L116">        return lname;</span>
+    }
+
+    public String getPhoneNum() {
+<span class="fc" id="L120">        return phoneNum;</span>
+    }
+
+    public String getEmail() {
+<span class="fc" id="L124">        return email;</span>
+    }
+
+    public int getId() {
+<span class="fc" id="L128">        return id;</span>
+    }
+
+    public int getBossid() {
+<span class="fc" id="L132">        return bossid;</span>
+    }
+
+    public boolean isAdmin() {
+<span class="fc" id="L136">        return isAdmin;</span>
+    }
+
+//Setters
+    public void setFname(String fname) {
+<span class="fc" id="L141">        this.fname = fname;</span>
+<span class="fc" id="L142">    }</span>
+
+    public void setLname(String lname) {
+<span class="fc" id="L145">        this.lname = lname;</span>
+<span class="fc" id="L146">    }</span>
+
+    public void setPhoneNum(String phoneNum) {
+<span class="fc" id="L149">        this.phoneNum = phoneNum;</span>
+<span class="fc" id="L150">    }</span>
+
+    public void setEmail(String email) {
+<span class="fc" id="L153">        this.email = email;</span>
+<span class="fc" id="L154">    }</span>
+
+    public void setId(int id) {
+<span class="fc" id="L157">        this.id = id;</span>
+<span class="fc" id="L158">    }</span>
+
+    public void setBossid(int bossid) {
+<span class="fc" id="L161">        this.bossid = bossid;</span>
+<span class="fc" id="L162">    }</span>
+
+    public void setAdmin(boolean admin) {
+<span class="nc" id="L165">        isAdmin = admin;</span>
+<span class="nc" id="L166">    }</span>
+
+<span class="fc" id="L168">    public String getPword() { return pword; }</span>
+
+<span class="fc" id="L170">    public void setPword(String pword) {this.pword = pword;}</span>
+
+    @Override
+    public String toString() {
+<span class="nc" id="L174">        return &quot;{&quot;+</span>
+                &quot;fname='&quot;+fname+
+                &quot;,lname='&quot;+ lname+
+                &quot;,phoneNum='&quot;+ phoneNum+
+                &quot;,email='&quot; +email+
+                &quot;,id=&quot; +id+
+                &quot;,bossid=&quot; +bossid+
+                &quot;,isAdmin=&quot; + isAdmin+
+                '}';
+    }
+}//End of Employees Class
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

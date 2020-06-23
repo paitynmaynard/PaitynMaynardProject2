@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Maintenance_Ticket.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Coaster_manager</a> &gt; <a href="index.source.html" class="el_package">models</a> &gt; <span class="el_source">Maintenance_Ticket.java</span></div><h1>Maintenance_Ticket.java</h1><pre class="source lang-java linenums">package models;
+
+import java.time.LocalDateTime;
+import java.util.Date;
+
+/**
+ *  Project 2:&lt;br&gt;
+ * &lt;br&gt;
+ *  Maintenance_Ticket is used to model a Maintenance_Ticket object
+ *
+ *  &lt;br&gt; &lt;br&gt;
+ *  Created: &lt;br&gt;
+ *     May 11, 2020 Paityn Maynard&lt;br&gt;
+ *     With assistance from: &lt;br&gt;
+ *  Modifications: &lt;br&gt;
+ *
+ *       &lt;hr&gt;
+ *    Added toString for JSON RESPONSES
+ *      Jean Aldoph II
+ *      &lt;hr&gt;
+ *
+ * &lt;br&gt;
+ *  @author
+ *  @version 11 May 2020
+ */
+public class Maintenance_Ticket {//Start of Maintenance_Ticket Class
+//Instant Variables
+    private int mainId, attractionId, employeeId;
+    private String status, description;
+    private LocalDateTime startDate,endDate;
+    private boolean isActive;
+
+//Constructors
+    /**
+     * Used to create a new Maintenance_Ticket object
+     * @param mainId
+     * @param attractionId
+     * @param employeeId
+     * @param status
+     * @param description
+     * @param startDate
+     * @param endDate
+     */
+<span class="fc" id="L44">    public Maintenance_Ticket(int mainId, int attractionId, int employeeId, String status, String description,LocalDateTime startDate, LocalDateTime endDate, Boolean isActive){</span>
+<span class="fc" id="L45">        this.mainId = mainId;</span>
+<span class="fc" id="L46">        this.attractionId = attractionId;</span>
+<span class="fc" id="L47">        this.employeeId = employeeId;</span>
+<span class="fc" id="L48">        this.status = status;</span>
+<span class="fc" id="L49">        this.description=description;</span>
+<span class="fc" id="L50">        this.startDate = startDate;</span>
+<span class="fc" id="L51">        this.endDate = endDate;</span>
+<span class="fc" id="L52">        this.isActive = isActive;</span>
+
+<span class="fc" id="L54">    }</span>
+
+<span class="fc" id="L56">    public Maintenance_Ticket() { }</span>
+
+<span class="nc" id="L58">    public Maintenance_Ticket(int attractionId, int employeeId, String status, String description, boolean isActive) {</span>
+<span class="nc" id="L59">        this.attractionId = attractionId;</span>
+<span class="nc" id="L60">        this.employeeId = employeeId;</span>
+<span class="nc" id="L61">        this.status = status;</span>
+<span class="nc" id="L62">        this.description=description;</span>
+<span class="nc" id="L63">        this.startDate = LocalDateTime.now();</span>
+<span class="nc" id="L64">        this.isActive = isActive;</span>
+
+<span class="nc" id="L66">    }</span>
+
+//Getters
+    public int getMainId() {
+<span class="fc" id="L70">        return mainId;</span>
+    }
+
+    public int getAttractionId() {
+<span class="nc" id="L74">        return attractionId;</span>
+    }
+
+    public int getEmployeeId() {
+<span class="nc" id="L78">        return employeeId;</span>
+    }
+
+    public String getStatus() {
+<span class="fc" id="L82">        return status;</span>
+    }
+
+    public String getDescription() {
+<span class="nc" id="L86">        return description;</span>
+    }
+
+<span class="nc" id="L89">    public LocalDateTime getStartDate() {return this.startDate;}</span>
+
+<span class="fc" id="L91">    public LocalDateTime getEndDate() {return this.endDate;}</span>
+
+    public boolean isActive() {
+<span class="nc" id="L94">        return isActive;</span>
+    }
+
+//Setters
+    public void setMainId(int mainId) {
+<span class="fc" id="L99">        this.mainId = mainId;</span>
+<span class="fc" id="L100">    }</span>
+
+    public void setAttractionId(int attractionId) {
+<span class="fc" id="L103">        this.attractionId = attractionId;</span>
+<span class="fc" id="L104">    }</span>
+
+    public void setEmployeeId(int employeeId) {
+<span class="fc" id="L107">        this.employeeId = employeeId;</span>
+<span class="fc" id="L108">    }</span>
+
+    public void setStatus(String status) {
+<span class="fc" id="L111">        this.status = status;</span>
+<span class="fc" id="L112">    }</span>
+
+    public void setDescription(String description) {
+<span class="fc" id="L115">        this.description = description;</span>
+<span class="fc" id="L116">    }</span>
+
+<span class="fc" id="L118">    public void setStartDate(LocalDateTime date){this.startDate = date;}</span>
+
+<span class="fc" id="L120">    public void setEndDate(LocalDateTime date){this.endDate = date;}</span>
+
+    public void setActive(boolean active) {
+<span class="fc" id="L123">        isActive = active;</span>
+<span class="fc" id="L124">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc" id="L128">        return &quot;{mainId=&quot; + mainId +</span>
+                &quot;,attractionId=&quot; + attractionId +
+                &quot;,employeeId=&quot; + employeeId +
+                &quot;,status='&quot; + status +
+                &quot;,description='&quot; + description +
+                &quot;,startDate=&quot; + startDate +
+                &quot;,endDate=&quot; + endDate +
+                &quot;,isActive=&quot; + isActive +
+                '}';
+    }
+}//End of Maintenance_Ticket Class
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

@@ -1,0 +1,221 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Maintenance_Ticket</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">models</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Maintenance_Ticket (models)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Maintenance_Ticket</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65%
+  </span>
+  <span class="absValue">
+    (13/ 20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (28/ 42)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package models;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.time.LocalDateTime;
+<i>4</i>&nbsp;import java.util.Date;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;/**
+<i>7</i>&nbsp; *  Project 2:&lt;br&gt;
+<i>8</i>&nbsp; * &lt;br&gt;
+<i>9</i>&nbsp; *  Maintenance_Ticket is used to model a Maintenance_Ticket object
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; *  &lt;br&gt; &lt;br&gt;
+<i>12</i>&nbsp; *  Created: &lt;br&gt;
+<i>13</i>&nbsp; *     May 11, 2020 Paityn Maynard&lt;br&gt;
+<i>14</i>&nbsp; *     With assistance from: &lt;br&gt;
+<i>15</i>&nbsp; *  Modifications: &lt;br&gt;
+<i>16</i>&nbsp; *
+<i>17</i>&nbsp; *       &lt;hr&gt;
+<i>18</i>&nbsp; *    Added toString for JSON RESPONSES
+<i>19</i>&nbsp; *      Jean Aldoph II
+<i>20</i>&nbsp; *      &lt;hr&gt;
+<i>21</i>&nbsp; *
+<i>22</i>&nbsp; * &lt;br&gt;
+<i>23</i>&nbsp; *  @author
+<i>24</i>&nbsp; *  @version 11 May 2020
+<i>25</i>&nbsp; */
+<i>26</i>&nbsp;public class Maintenance_Ticket {//Start of Maintenance_Ticket Class
+<i>27</i>&nbsp;//Instant Variables
+<i>28</i>&nbsp;    private int mainId, attractionId, employeeId;
+<i>29</i>&nbsp;    private String status, description;
+<i>30</i>&nbsp;    private LocalDateTime startDate,endDate;
+<i>31</i>&nbsp;    private boolean isActive;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;//Constructors
+<i>34</i>&nbsp;    /**
+<i>35</i>&nbsp;     * Used to create a new Maintenance_Ticket object
+<i>36</i>&nbsp;     * @param mainId
+<i>37</i>&nbsp;     * @param attractionId
+<i>38</i>&nbsp;     * @param employeeId
+<i>39</i>&nbsp;     * @param status
+<i>40</i>&nbsp;     * @param description
+<i>41</i>&nbsp;     * @param startDate
+<i>42</i>&nbsp;     * @param endDate
+<i>43</i>&nbsp;     */
+<b class="fc"><i>44</i>&nbsp;    public Maintenance_Ticket(int mainId, int attractionId, int employeeId, String status, String description,LocalDateTime startDate, LocalDateTime endDate, Boolean isActive){</b>
+<b class="fc"><i>45</i>&nbsp;        this.mainId = mainId;</b>
+<b class="fc"><i>46</i>&nbsp;        this.attractionId = attractionId;</b>
+<b class="fc"><i>47</i>&nbsp;        this.employeeId = employeeId;</b>
+<b class="fc"><i>48</i>&nbsp;        this.status = status;</b>
+<b class="fc"><i>49</i>&nbsp;        this.description=description;</b>
+<b class="fc"><i>50</i>&nbsp;        this.startDate = startDate;</b>
+<b class="fc"><i>51</i>&nbsp;        this.endDate = endDate;</b>
+<b class="fc"><i>52</i>&nbsp;        this.isActive = isActive;</b>
+<i>53</i>&nbsp;
+<b class="fc"><i>54</i>&nbsp;    }</b>
+<i>55</i>&nbsp;
+<b class="fc"><i>56</i>&nbsp;    public Maintenance_Ticket() { }</b>
+<i>57</i>&nbsp;
+<b class="nc"><i>58</i>&nbsp;    public Maintenance_Ticket(int attractionId, int employeeId, String status, String description, boolean isActive) {</b>
+<b class="nc"><i>59</i>&nbsp;        this.attractionId = attractionId;</b>
+<b class="nc"><i>60</i>&nbsp;        this.employeeId = employeeId;</b>
+<b class="nc"><i>61</i>&nbsp;        this.status = status;</b>
+<b class="nc"><i>62</i>&nbsp;        this.description=description;</b>
+<b class="nc"><i>63</i>&nbsp;        this.startDate = LocalDateTime.now();</b>
+<b class="nc"><i>64</i>&nbsp;        this.isActive = isActive;</b>
+<i>65</i>&nbsp;
+<b class="nc"><i>66</i>&nbsp;    }</b>
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;//Getters
+<i>69</i>&nbsp;    public int getMainId() {
+<b class="fc"><i>70</i>&nbsp;        return mainId;</b>
+<i>71</i>&nbsp;    }
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;    public int getAttractionId() {
+<b class="nc"><i>74</i>&nbsp;        return attractionId;</b>
+<i>75</i>&nbsp;    }
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    public int getEmployeeId() {
+<b class="nc"><i>78</i>&nbsp;        return employeeId;</b>
+<i>79</i>&nbsp;    }
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;    public String getStatus() {
+<b class="fc"><i>82</i>&nbsp;        return status;</b>
+<i>83</i>&nbsp;    }
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    public String getDescription() {
+<b class="nc"><i>86</i>&nbsp;        return description;</b>
+<i>87</i>&nbsp;    }
+<i>88</i>&nbsp;
+<b class="nc"><i>89</i>&nbsp;    public LocalDateTime getStartDate() {return this.startDate;}</b>
+<i>90</i>&nbsp;
+<b class="fc"><i>91</i>&nbsp;    public LocalDateTime getEndDate() {return this.endDate;}</b>
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    public boolean isActive() {
+<b class="nc"><i>94</i>&nbsp;        return isActive;</b>
+<i>95</i>&nbsp;    }
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;//Setters
+<i>98</i>&nbsp;    public void setMainId(int mainId) {
+<b class="fc"><i>99</i>&nbsp;        this.mainId = mainId;</b>
+<b class="fc"><i>100</i>&nbsp;    }</b>
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    public void setAttractionId(int attractionId) {
+<b class="fc"><i>103</i>&nbsp;        this.attractionId = attractionId;</b>
+<b class="fc"><i>104</i>&nbsp;    }</b>
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;    public void setEmployeeId(int employeeId) {
+<b class="fc"><i>107</i>&nbsp;        this.employeeId = employeeId;</b>
+<b class="fc"><i>108</i>&nbsp;    }</b>
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    public void setStatus(String status) {
+<b class="fc"><i>111</i>&nbsp;        this.status = status;</b>
+<b class="fc"><i>112</i>&nbsp;    }</b>
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;    public void setDescription(String description) {
+<b class="fc"><i>115</i>&nbsp;        this.description = description;</b>
+<b class="fc"><i>116</i>&nbsp;    }</b>
+<i>117</i>&nbsp;
+<b class="fc"><i>118</i>&nbsp;    public void setStartDate(LocalDateTime date){this.startDate = date;}</b>
+<i>119</i>&nbsp;
+<b class="fc"><i>120</i>&nbsp;    public void setEndDate(LocalDateTime date){this.endDate = date;}</b>
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;    public void setActive(boolean active) {
+<b class="fc"><i>123</i>&nbsp;        isActive = active;</b>
+<b class="fc"><i>124</i>&nbsp;    }</b>
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;    @Override
+<i>127</i>&nbsp;    public String toString() {
+<b class="nc"><i>128</i>&nbsp;        return &quot;{mainId=&quot; + mainId +</b>
+<i>129</i>&nbsp;                &quot;,attractionId=&quot; + attractionId +
+<i>130</i>&nbsp;                &quot;,employeeId=&quot; + employeeId +
+<i>131</i>&nbsp;                &quot;,status=&#39;&quot; + status +
+<i>132</i>&nbsp;                &quot;,description=&#39;&quot; + description +
+<i>133</i>&nbsp;                &quot;,startDate=&quot; + startDate +
+<i>134</i>&nbsp;                &quot;,endDate=&quot; + endDate +
+<i>135</i>&nbsp;                &quot;,isActive=&quot; + isActive +
+<i>136</i>&nbsp;                &#39;}&#39;;
+<i>137</i>&nbsp;    }
+<i>138</i>&nbsp;}//End of Maintenance_Ticket Class
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 02:18</div>
+</div>
+</body>
+</html>

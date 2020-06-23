@@ -1,0 +1,559 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GenerationDAO</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">data</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GenerationDAO (data)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GenerationDAO</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    38.7%
+  </span>
+  <span class="absValue">
+    (63/ 163)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package data;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;
+<i>4</i>&nbsp;import models.Attraction;
+<i>5</i>&nbsp;import models.Customer;
+<i>6</i>&nbsp;import models.Employee;
+<i>7</i>&nbsp;import utils.PostgresConnectionUtil;
+<i>8</i>&nbsp;import java.io.*;
+<i>9</i>&nbsp;import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
+<i>10</i>&nbsp;import org.apache.commons.httpclient.HttpClient;
+<i>11</i>&nbsp;import org.apache.commons.httpclient.HttpException;
+<i>12</i>&nbsp;import org.apache.commons.httpclient.HttpStatus;
+<i>13</i>&nbsp;import org.apache.commons.httpclient.methods.GetMethod;
+<i>14</i>&nbsp;import org.apache.commons.httpclient.params.HttpMethodParams;
+<i>15</i>&nbsp;import java.lang.reflect.Array;
+<i>16</i>&nbsp;import java.net.InetAddress;
+<i>17</i>&nbsp;import java.net.UnknownHostException;
+<i>18</i>&nbsp;import java.sql.Connection;
+<i>19</i>&nbsp;import java.sql.PreparedStatement;
+<i>20</i>&nbsp;import java.sql.SQLException;
+<i>21</i>&nbsp;import java.time.LocalDateTime;
+<i>22</i>&nbsp;import java.time.format.DateTimeFormatter;
+<i>23</i>&nbsp;import java.util.*;
+<i>24</i>&nbsp;import java.time.LocalDateTime;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;public class GenerationDAO {
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    public GenerationDAO()
+<b class="fc"><i>29</i>&nbsp;    {</b>
+<b class="fc"><i>30</i>&nbsp;    }</b>
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    public ArrayList makeAday(int i) throws IOException {
+<b class="fc"><i>34</i>&nbsp;        if (i&gt;95) i= 95;</b>
+<b class="fc"><i>35</i>&nbsp;        System.out.println(&quot;generating &quot;+ i+ &quot; days of business!&quot;);</b>
+<i>36</i>&nbsp;
+<b class="fc"><i>37</i>&nbsp;        for (int j = 0; j &lt; i; j++) {</b>
+<i>38</i>&nbsp;            //        FileReader in = new FileReader(&quot;.\\resources\\ticketsSoldLAst.txt&quot;);
+<i>39</i>&nbsp;            //        BufferedReader br = new BufferedReader(in);
+<i>40</i>&nbsp;            //        Integer oldTickets = 0;
+<i>41</i>&nbsp;            //        //read from file how many tickets were made last time
+<i>42</i>&nbsp;            //        try
+<i>43</i>&nbsp;            //        {
+<i>44</i>&nbsp;            //            oldTickets = new Integer(br.readLine());
+<i>45</i>&nbsp;            //            System.out.println(oldTickets);
+<i>46</i>&nbsp;            //        }
+<i>47</i>&nbsp;            //        catch (Exception e)
+<i>48</i>&nbsp;            //        {
+<i>49</i>&nbsp;            //            e.printStackTrace();
+<i>50</i>&nbsp;            //        }
+<i>51</i>&nbsp;            //        finally
+<i>52</i>&nbsp;            //        {
+<i>53</i>&nbsp;            //            if (in != null) in.close();
+<i>54</i>&nbsp;            //        }
+<b class="nc"><i>55</i>&nbsp;            ArrayList response = new ArrayList();</b>
+<b class="nc"><i>56</i>&nbsp;            Integer oldTickets = 1500;</b>
+<i>57</i>&nbsp;
+<b class="nc"><i>58</i>&nbsp;            Random rand = new Random();</b>
+<i>59</i>&nbsp;            Integer base, ticketsSold;
+<i>60</i>&nbsp;            Integer move;
+<i>61</i>&nbsp;            Integer ticketDiff;
+<b class="nc"><i>62</i>&nbsp;            List&lt;String&gt; newEmails = new ArrayList();</b>
+<b class="nc"><i>63</i>&nbsp;            base = 0;</b>
+<b class="nc"><i>64</i>&nbsp;            List&lt;Attraction&gt; attractions = new ArrayList();</b>
+<i>65</i>&nbsp;            Integer ticketsNow;
+<i>66</i>&nbsp;            Attraction temp;
+<b class="nc"><i>67</i>&nbsp;            ticketsSold = 0;</b>
+<b class="nc"><i>68</i>&nbsp;            Integer ticketRating = 0;</b>
+<b class="nc"><i>69</i>&nbsp;            SQLDatabaseIntAttraction intAttractionDB = new SQLDatabaseIntAttraction(new PostgresConnectionUtil());</b>
+<b class="nc"><i>70</i>&nbsp;            SQLDatabaseExtAttractions extAttractionDB = new SQLDatabaseExtAttractions(new PostgresConnectionUtil());</b>
+<b class="nc"><i>71</i>&nbsp;            SQLDatabaseCustomerDAO customerDB = new SQLDatabaseCustomerDAO(new PostgresConnectionUtil());</b>
+<b class="nc"><i>72</i>&nbsp;            SQLDatabaseEmployees employeeDB = new SQLDatabaseEmployees(new PostgresConnectionUtil());</b>
+<i>73</i>&nbsp;            Attraction attraction;
+<i>74</i>&nbsp;            Customer customer;
+<i>75</i>&nbsp;            Employee employee;
+<b class="nc"><i>76</i>&nbsp;            List&lt;Customer&gt; list = customerDB.findAll();</b>
+<b class="nc"><i>77</i>&nbsp;            List&lt;Employee&gt; elist = employeeDB.findAll();</b>
+<b class="nc"><i>78</i>&nbsp;            Integer iterationBound = 10;</b>
+<b class="nc"><i>79</i>&nbsp;            while (base++ &lt; iterationBound) {</b>
+<i>80</i>&nbsp;                //System.out.println(base);
+<b class="nc"><i>81</i>&nbsp;                move = rand.nextInt(10_000);</b>
+<b class="nc"><i>82</i>&nbsp;                if ((move &lt;= 10_000) &amp; (move &gt; 6_333)) {</b>
+<b class="nc"><i>83</i>&nbsp;                    continue;</b>
+<b class="nc"><i>84</i>&nbsp;                } else if ((move &lt;= 6_333) &amp; (move &gt; 3_333)) //Old Customer buys 1-9 tickets</b>
+<i>85</i>&nbsp;                {
+<b class="nc"><i>86</i>&nbsp;                    ticketsNow = rand.nextInt(10);</b>
+<i>87</i>&nbsp;                    //select random customer from list
+<b class="nc"><i>88</i>&nbsp;                    customer = list.get(rand.nextInt(list.size()));</b>
+<i>89</i>&nbsp;                    //send message to customerTickets to make customer tickets.;
+<i>90</i>&nbsp;                    //Messaging goes here
+<b class="nc"><i>91</i>&nbsp;                    makeTickets(customer, ticketsNow);</b>
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;                    ticketsSold += ticketsNow;</b>
+<b class="nc"><i>94</i>&nbsp;                } else if (move &lt;= 3_333) //New Customer come to park</b>
+<i>95</i>&nbsp;                {
+<b class="nc"><i>96</i>&nbsp;                    ticketsNow = rand.nextInt(10);</b>
+<i>97</i>&nbsp;                    //Manager findbyID Customers to make sure new customer is not in DB
+<b class="nc"><i>98</i>&nbsp;                    Customer temporaryCustomer = makeCustomer();</b>
+<b class="nc"><i>99</i>&nbsp;                    newEmails.add(temporaryCustomer.getEmail());</b>
+<i>100</i>&nbsp;                    //send message to customerTickets to make customer tickets.;
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;                    //Messaging goes here
+<b class="nc"><i>104</i>&nbsp;                    makeTickets(temporaryCustomer, ticketsNow);</b>
+<i>105</i>&nbsp;
+<b class="nc"><i>106</i>&nbsp;                    ticketsSold += ticketsNow; //# of tickets for Tickets sent for customer</b>
+<i>107</i>&nbsp;
+<b class="nc"><i>108</i>&nbsp;                }</b>
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;            }
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;
+<b class="nc"><i>113</i>&nbsp;            ticketDiff = oldTickets - ticketsSold;</b>
+<b class="nc"><i>114</i>&nbsp;            if ((ticketDiff &gt; 89) || (ticketDiff &lt; -89)) ticketRating = 10;</b>
+<b class="nc"><i>115</i>&nbsp;            else if ((ticketDiff &gt; 69) || (ticketDiff &lt; -69)) ticketRating = 9;</b>
+<b class="nc"><i>116</i>&nbsp;            else if ((ticketDiff &gt; 49) || (ticketDiff &lt; -49)) ticketRating = 8;</b>
+<b class="nc"><i>117</i>&nbsp;            else if ((ticketDiff &gt; 39) || (ticketDiff &lt; -39)) ticketRating = 7;</b>
+<b class="nc"><i>118</i>&nbsp;            else if ((ticketDiff &gt; 29) || (ticketDiff &lt; -29)) ticketRating = 6;</b>
+<b class="nc"><i>119</i>&nbsp;            else if ((ticketDiff &gt; 19) || (ticketDiff &lt; -19)) ticketRating = 5;</b>
+<b class="nc"><i>120</i>&nbsp;            else ticketRating = 4;</b>
+<i>121</i>&nbsp;
+<b class="nc"><i>122</i>&nbsp;            if (ticketDiff &gt; 0) {</b>
+<b class="nc"><i>123</i>&nbsp;                int wait = 0;</b>
+<b class="nc"><i>124</i>&nbsp;                attractions = extAttractionDB.findAll();</b>
+<b class="nc"><i>125</i>&nbsp;                Iterator it = attractions.iterator();</b>
+<b class="nc"><i>126</i>&nbsp;                while (it.hasNext()) {</b>
+<b class="nc"><i>127</i>&nbsp;                    temp = (Attraction) it.next();</b>
+<b class="nc"><i>128</i>&nbsp;                    if (temp.getRating() == ticketRating) {</b>
+<b class="nc"><i>129</i>&nbsp;                        extAttractionDB.add(temp);</b>
+<b class="nc"><i>130</i>&nbsp;                        break;</b>
+<i>131</i>&nbsp;                    }
+<i>132</i>&nbsp;                }
+<b class="nc"><i>133</i>&nbsp;                int iters = 0;</b>
+<i>134</i>&nbsp;                //Add # of employees == ticket rating
+<b class="nc"><i>135</i>&nbsp;                while (iters &lt; ticketRating) {</b>
+<b class="nc"><i>136</i>&nbsp;                    employeeDB.remove(elist.get(rand.nextInt()).getId());</b>
+<b class="nc"><i>137</i>&nbsp;                    iters++;</b>
+<i>138</i>&nbsp;                }
+<b class="nc"><i>139</i>&nbsp;            } else if (ticketDiff &lt; 0) {</b>
+<b class="nc"><i>140</i>&nbsp;                int wait = 0;</b>
+<b class="nc"><i>141</i>&nbsp;                attractions = intAttractionDB.findAll();</b>
+<b class="nc"><i>142</i>&nbsp;                Iterator it = attractions.iterator();</b>
+<b class="nc"><i>143</i>&nbsp;                while (it.hasNext()) {</b>
+<b class="nc"><i>144</i>&nbsp;                    temp = (Attraction) it.next();</b>
+<b class="nc"><i>145</i>&nbsp;                    if (temp.getRating() == ticketRating) {</b>
+<b class="nc"><i>146</i>&nbsp;                        intAttractionDB.remove(temp.getId());</b>
+<b class="nc"><i>147</i>&nbsp;                        break;</b>
+<i>148</i>&nbsp;                    }
+<i>149</i>&nbsp;                }
+<i>150</i>&nbsp;                //Remove # of employees = to ticketRating
+<b class="nc"><i>151</i>&nbsp;                int iters = 0;</b>
+<b class="nc"><i>152</i>&nbsp;                while (iters &lt; ticketRating) {</b>
+<b class="nc"><i>153</i>&nbsp;                    employeeDB.add(makeEmployee());</b>
+<b class="nc"><i>154</i>&nbsp;                    iters++;</b>
+<i>155</i>&nbsp;                }
+<i>156</i>&nbsp;            }
+<i>157</i>&nbsp;
+<i>158</i>&nbsp;
+<i>159</i>&nbsp;//            FileWriter win = new FileWriter(&quot;resources\\ticketsSoldLAst.txt&quot;);
+<i>160</i>&nbsp;//
+<i>161</i>&nbsp;//            try
+<i>162</i>&nbsp;//            {
+<i>163</i>&nbsp;//                PrintWriter write = new PrintWriter(win);
+<i>164</i>&nbsp;//                write.println(ticketsSold);
+<i>165</i>&nbsp;//                write.close();
+<i>166</i>&nbsp;//                System.out.println(ticketDiff);
+<i>167</i>&nbsp;//            }
+<i>168</i>&nbsp;//            catch (Exception e)
+<i>169</i>&nbsp;//            {
+<i>170</i>&nbsp;//                e.printStackTrace();
+<i>171</i>&nbsp;//            }
+<i>172</i>&nbsp;//            finally
+<i>173</i>&nbsp;//            {
+<i>174</i>&nbsp;//                if (in != null) in.close();
+<i>175</i>&nbsp;//
+<i>176</i>&nbsp;//            }
+<i>177</i>&nbsp;//            //Return a Breakdown of what happened in the Generation for write-back to
+<i>178</i>&nbsp;//            //Servlet
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;        }
+<b class="fc"><i>181</i>&nbsp;        return null;</b>
+<i>182</i>&nbsp;        //Response: response.add(newEmails.size());
+<i>183</i>&nbsp;        //            return response;
+<i>184</i>&nbsp;        // [0]: # new Customers
+<i>185</i>&nbsp;        // [1]: # return customers,
+<i>186</i>&nbsp;        // [2]: new Attraction ID / Removed attraction ID
+<i>187</i>&nbsp;        // [3]: # of employees hired or fired
+<i>188</i>&nbsp;        // [4]: ticket Diff
+<i>189</i>&nbsp;    }
+<i>190</i>&nbsp;
+<i>191</i>&nbsp;    public Customer makeCustomer()
+<i>192</i>&nbsp;    {
+<b class="fc"><i>193</i>&nbsp;        String startUp = null;</b>
+<b class="fc"><i>194</i>&nbsp;        while (startUp == null)</b>
+<i>195</i>&nbsp;        {
+<b class="fc"><i>196</i>&nbsp;            startUp = indicativeFoul();</b>
+<i>197</i>&nbsp;        }
+<b class="fc"><i>198</i>&nbsp;        String[] values =  startUp.split(&quot;!&quot;);</b>
+<b class="fc"><i>199</i>&nbsp;        Customer newCustomer = new Customer(values[0],values[1],values[2],&quot;password&quot;);</b>
+<b class="fc"><i>200</i>&nbsp;        SQLDatabaseCustomerDAO customerDB = new SQLDatabaseCustomerDAO(new PostgresConnectionUtil());</b>
+<b class="fc"><i>201</i>&nbsp;        customerDB.save(newCustomer);</b>
+<b class="fc"><i>202</i>&nbsp;        Customer returnValue = customerDB.findById(values[2]);</b>
+<b class="fc"><i>203</i>&nbsp;        List&lt;Customer&gt; cml = customerDB.findAll();</b>
+<b class="fc"><i>204</i>&nbsp;        if (returnValue != null)</b>
+<i>205</i>&nbsp;        {
+<b class="nc"><i>206</i>&nbsp;            return returnValue;</b>
+<i>207</i>&nbsp;        }
+<i>208</i>&nbsp;        else
+<i>209</i>&nbsp;        {
+<b class="fc"><i>210</i>&nbsp;            return cml.get(new Random().nextInt(cml.size()));</b>
+<i>211</i>&nbsp;        }
+<i>212</i>&nbsp;
+<i>213</i>&nbsp;
+<i>214</i>&nbsp;    }
+<i>215</i>&nbsp;
+<i>216</i>&nbsp;    public Employee makeEmployee()
+<i>217</i>&nbsp;    {
+<b class="fc"><i>218</i>&nbsp;        String startUp = null;</b>
+<b class="fc"><i>219</i>&nbsp;        while (startUp == null)</b>
+<i>220</i>&nbsp;        {
+<b class="fc"><i>221</i>&nbsp;                startUp = indicativeFoul();</b>
+<i>222</i>&nbsp;        }
+<b class="fc"><i>223</i>&nbsp;        String[] values =  startUp.split(&quot;!&quot;);</b>
+<b class="fc"><i>224</i>&nbsp;        Employee newEmployee = new Employee(values[0],values[1],&quot;9999999999&quot;,values[2],&quot;password&quot;,12,false);</b>
+<b class="fc"><i>225</i>&nbsp;        SQLDatabaseEmployees employeeDB = new SQLDatabaseEmployees(new PostgresConnectionUtil());</b>
+<b class="fc"><i>226</i>&nbsp;        if (employeeDB.add(newEmployee))</b>
+<i>227</i>&nbsp;        {
+<b class="nc"><i>228</i>&nbsp;            Employee returnValue = employeeDB.findByID(newEmployee.getId());</b>
+<i>229</i>&nbsp;
+<b class="nc"><i>230</i>&nbsp;            return returnValue;</b>
+<i>231</i>&nbsp;        }
+<i>232</i>&nbsp;        else
+<i>233</i>&nbsp;        {
+<b class="fc"><i>234</i>&nbsp;            List&lt;Employee&gt; eml = employeeDB.findAll();</b>
+<b class="fc"><i>235</i>&nbsp;            return eml.get(new Random().nextInt(eml.size()));</b>
+<i>236</i>&nbsp;        }
+<i>237</i>&nbsp;    }
+<i>238</i>&nbsp;
+<i>239</i>&nbsp;    public String indicativeFoul()
+<i>240</i>&nbsp;    {
+<b class="fc"><i>241</i>&nbsp;        String url = &quot;https://randomuser.me/api/&quot;;</b>
+<b class="fc"><i>242</i>&nbsp;        HttpClient client = new HttpClient();</b>
+<b class="fc"><i>243</i>&nbsp;        GetMethod method = new GetMethod(url);</b>
+<b class="fc"><i>244</i>&nbsp;        method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,</b>
+<i>245</i>&nbsp;                new DefaultHttpMethodRetryHandler(3, false));
+<b class="fc"><i>246</i>&nbsp;        String item = &quot;&quot;;</b>
+<b class="fc"><i>247</i>&nbsp;        String item1 = &quot;&quot;;</b>
+<b class="fc"><i>248</i>&nbsp;        String item2 = &quot;&quot;;</b>
+<i>249</i>&nbsp;        try {
+<b class="fc"><i>250</i>&nbsp;            int statusCode = client.executeMethod(method);</b>
+<b class="fc"><i>251</i>&nbsp;            if (statusCode != HttpStatus.SC_OK) {</b>
+<b class="nc"><i>252</i>&nbsp;                System.err.println(&quot;Method failed: &quot; + method.getStatusLine());</b>
+<i>253</i>&nbsp;            }
+<b class="fc"><i>254</i>&nbsp;            byte[] responseBody = method.getResponseBody();</b>
+<b class="fc"><i>255</i>&nbsp;            String rezzy = new String(responseBody);</b>
+<b class="fc"><i>256</i>&nbsp;            String[] stack = rezzy.split(&quot;\&quot;.\&quot;&quot;);</b>
+<b class="fc"><i>257</i>&nbsp;            int holder = 1;</b>
+<b class="fc"><i>258</i>&nbsp;            for (String i : stack)</b>
+<i>259</i>&nbsp;            {
+<b class="fc"><i>260</i>&nbsp;                if (i.trim().equals(&quot;first&quot;))</b>
+<i>261</i>&nbsp;                {
+<b class="fc"><i>262</i>&nbsp;                    item = (stack[holder]).toString();</b>
+<i>263</i>&nbsp;                }
+<b class="fc"><i>264</i>&nbsp;                else if (i.trim().contains(&quot;email&quot;))</b>
+<i>265</i>&nbsp;                {
+<b class="fc"><i>266</i>&nbsp;                    item1 =(stack[holder]).toString();</b>
+<i>267</i>&nbsp;                }
+<b class="fc"><i>268</i>&nbsp;                else if (i.trim().contains(&quot;last&quot;))</b>
+<i>269</i>&nbsp;                {
+<b class="fc"><i>270</i>&nbsp;                    item2 = (stack[holder]).split(&quot;\&quot;&quot;)[0];</b>
+<i>271</i>&nbsp;                }
+<i>272</i>&nbsp;                //System.out.println(holder-1 +&quot;   &quot;+i);
+<b class="fc"><i>273</i>&nbsp;                holder++;</b>
+<i>274</i>&nbsp;            }
+<b class="fc"><i>275</i>&nbsp;            if ((item.trim() == null) || (item2.trim() == null) || (item1.trim() ==null)) return null;</b>
+<i>276</i>&nbsp;
+<b class="nc"><i>277</i>&nbsp;        } catch (HttpException e) {</b>
+<b class="nc"><i>278</i>&nbsp;            System.err.println(&quot;Fatal protocol violation: &quot; + e.getMessage());</b>
+<b class="nc"><i>279</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>280</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>281</i>&nbsp;            System.err.println(&quot;Fatal transport error: &quot; + e.getMessage());</b>
+<b class="nc"><i>282</i>&nbsp;            e.printStackTrace();</b>
+<i>283</i>&nbsp;        } finally {
+<i>284</i>&nbsp;            // Release the connection.
+<b class="fc"><i>285</i>&nbsp;            method.releaseConnection();</b>
+<b class="fc"><i>286</i>&nbsp;        }</b>
+<b class="fc"><i>287</i>&nbsp;        if ((item.trim() == &quot;&quot;) || (item2.trim() == &quot;&quot;) || (item1.trim() == &quot;&quot;)) return null;</b>
+<b class="fc"><i>288</i>&nbsp;        return item.trim()+&quot;!&quot;+item2.trim()+&quot;!&quot;+item1.trim();</b>
+<i>289</i>&nbsp;    }
+<i>290</i>&nbsp;
+<i>291</i>&nbsp;//    public void sendMessage(Customer c, int i)
+<i>292</i>&nbsp;//    {
+<i>293</i>&nbsp;//        InetAddress ip;
+<i>294</i>&nbsp;//        try
+<i>295</i>&nbsp;//        {
+<i>296</i>&nbsp;//            ip = InetAddress.getLocalHost();
+<i>297</i>&nbsp;//            Jedis jedis = new Jedis(&quot;redis-clusterip&quot;, 6379);
+<i>298</i>&nbsp;//            jedis.publish(&quot;TicketGeneration&quot;,c.toString()+&#39;!&#39;+String.valueOf(i));
+<i>299</i>&nbsp;//        }
+<i>300</i>&nbsp;//        catch (UnknownHostException e)
+<i>301</i>&nbsp;//        {
+<i>302</i>&nbsp;//            e.printStackTrace();
+<i>303</i>&nbsp;//        }
+<i>304</i>&nbsp;//    }
+<i>305</i>&nbsp;
+<i>306</i>&nbsp;    public  void makeTickets(Customer c, int number)
+<i>307</i>&nbsp;    {
+<b class="fc"><i>308</i>&nbsp;        SQLDatabaseCustomerDAO og = new SQLDatabaseCustomerDAO(new PostgresConnectionUtil());</b>
+<i>309</i>&nbsp;        //System.out.println(&quot;GOT A MESSAGE&quot;);
+<b class="fc"><i>310</i>&nbsp;        Random rand = new Random();</b>
+<b class="fc"><i>311</i>&nbsp;        int randomMonth = rand.nextInt(12);</b>
+<b class="fc"><i>312</i>&nbsp;        if (randomMonth &lt; 6) randomMonth = 6;</b>
+<b class="fc"><i>313</i>&nbsp;        int randomDay = rand.nextInt(30);</b>
+<b class="fc"><i>314</i>&nbsp;        int randomStay = rand.nextInt(21);</b>
+<b class="fc"><i>315</i>&nbsp;        LocalDateTime ldt = LocalDateTime.now();</b>
+<b class="fc"><i>316</i>&nbsp;        ldt.plusMonths(randomMonth);</b>
+<b class="fc"><i>317</i>&nbsp;        ldt.plusDays(randomDay);</b>
+<i>318</i>&nbsp;//        int access = rand.nextInt(3);
+<i>319</i>&nbsp;//        if (access == 0) access += 1;
+<b class="fc"><i>320</i>&nbsp;        for (int i = 0; i &lt; number; i++)</b>
+<i>321</i>&nbsp;        {
+<b class="fc"><i>322</i>&nbsp;            save(new Ticket(c.getCustomerID(),1 , ldt, ldt.plusDays(randomStay)));</b>
+<i>323</i>&nbsp;        }
+<b class="nc"><i>324</i>&nbsp;        System.out.println(String.format(&quot;Ticket Generation Event:\n&quot; +</b>
+<i>325</i>&nbsp;                &quot;Created: %d tickets \n&quot; +
+<b class="nc"><i>326</i>&nbsp;                &quot;for customer: %s&quot;, number, c.getEmail()));</b>
+<i>327</i>&nbsp;
+<b class="nc"><i>328</i>&nbsp;    }</b>
+<i>329</i>&nbsp;
+<i>330</i>&nbsp;
+<i>331</i>&nbsp;    public void save(Ticket obj) {
+<b class="nc"><i>332</i>&nbsp;        PostgresConnectionUtil connectionUtil = new PostgresConnectionUtil();</b>
+<b class="nc"><i>333</i>&nbsp;        Connection connection = null;</b>
+<b class="nc"><i>334</i>&nbsp;        int success = -1;</b>
+<i>335</i>&nbsp;
+<b class="nc"><i>336</i>&nbsp;        String startdate = obj.getStartDate().format(DateTimeFormatter.ofPattern(&quot;dd/MM/YYYY&quot;));</b>
+<b class="nc"><i>337</i>&nbsp;        String enddate = obj.getEndDate().format(DateTimeFormatter.ofPattern(&quot;dd/MM/YYYY&quot;));</b>
+<i>338</i>&nbsp;
+<i>339</i>&nbsp;        try {
+<b class="nc"><i>340</i>&nbsp;            connection = connectionUtil.getConnection();</b>
+<b class="nc"><i>341</i>&nbsp;            String sql = &quot;Insert into project2.tickets (customerid, accsslevel, startdate, enddate) values (?,?,?,?)&quot;;</b>
+<b class="nc"><i>342</i>&nbsp;            PreparedStatement saveStatement = connection.prepareStatement(sql);</b>
+<b class="nc"><i>343</i>&nbsp;            saveStatement.setInt(1, obj.getCustomerID());</b>
+<b class="nc"><i>344</i>&nbsp;            saveStatement.setInt(2, obj.getAccessLevel());</b>
+<b class="nc"><i>345</i>&nbsp;            saveStatement.setString(3, startdate);</b>
+<b class="nc"><i>346</i>&nbsp;            saveStatement.setString(4, enddate);</b>
+<b class="nc"><i>347</i>&nbsp;            success = saveStatement.executeUpdate();</b>
+<b class="nc"><i>348</i>&nbsp;        } catch (SQLException throwables) {</b>
+<b class="nc"><i>349</i>&nbsp;            throwables.printStackTrace();</b>
+<i>350</i>&nbsp;        } finally {
+<b class="nc"><i>351</i>&nbsp;            if(connection != null) {</b>
+<i>352</i>&nbsp;                try {
+<b class="nc"><i>353</i>&nbsp;                    connection.close();</b>
+<b class="nc"><i>354</i>&nbsp;                } catch (SQLException throwables) {</b>
+<b class="nc"><i>355</i>&nbsp;                    throwables.printStackTrace();</b>
+<b class="nc"><i>356</i>&nbsp;                }</b>
+<i>357</i>&nbsp;            }
+<b class="nc"><i>358</i>&nbsp;        }</b>
+<i>359</i>&nbsp;        //System.out.println(&quot;saved ticket&quot;);
+<b class="nc"><i>360</i>&nbsp;    }</b>
+<i>361</i>&nbsp;
+<i>362</i>&nbsp;//    public void sendMessage(Customer c, int i) {
+<i>363</i>&nbsp;//        String currenturl = &quot;http://172.17.199.5:31515/TicketServlet&quot;;
+<i>364</i>&nbsp;//        HttpClient client = new HttpClient();
+<i>365</i>&nbsp;//        PostMethod method = new PostMethod(currenturl);
+<i>366</i>&nbsp;//        method.addParameter(&quot;number&quot;,String.valueOf(i));
+<i>367</i>&nbsp;//        method.addParameter(&quot;customerID&quot;,String.valueOf(c.getCustomerID()));
+<i>368</i>&nbsp;//        method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,new DefaultHttpMethodRetryHandler(2, false));
+<i>369</i>&nbsp;//        try {
+<i>370</i>&nbsp;//                int statusCode = client.executeMethod(method);
+<i>371</i>&nbsp;//                if (statusCode != HttpStatus.SC_OK)
+<i>372</i>&nbsp;//                {
+<i>373</i>&nbsp;//                    System.err.println(&quot;Method failed: &quot; + method.getStatusLine());
+<i>374</i>&nbsp;//                }
+<i>375</i>&nbsp;//                byte[] responseBody = method.getResponseBody();
+<i>376</i>&nbsp;//            System.out.println(responseBody);
+<i>377</i>&nbsp;//
+<i>378</i>&nbsp;//        }
+<i>379</i>&nbsp;//        catch (HttpException e)
+<i>380</i>&nbsp;//        {
+<i>381</i>&nbsp;//            System.err.println(&quot;Fatal protocol violation: &quot; + e.getMessage());
+<i>382</i>&nbsp;//            e.printStackTrace();
+<i>383</i>&nbsp;//        }
+<i>384</i>&nbsp;//        catch (IOException e)
+<i>385</i>&nbsp;//        {
+<i>386</i>&nbsp;//            System.err.println(&quot;Fatal transport error: &quot; + e.getMessage());
+<i>387</i>&nbsp;//            e.printStackTrace();
+<i>388</i>&nbsp;//        }
+<i>389</i>&nbsp;//        finally
+<i>390</i>&nbsp;//        {
+<i>391</i>&nbsp;//            method.releaseConnection();
+<i>392</i>&nbsp;//        }
+<i>393</i>&nbsp;//    }
+<i>394</i>&nbsp;}
+<i>395</i>&nbsp;/**
+<i>396</i>&nbsp; *  Project 2:&lt;br&gt;
+<i>397</i>&nbsp; * &lt;br&gt;
+<i>398</i>&nbsp; *  The Ticket class serves as a representation of a real-world ticket used for interacting with the system.
+<i>399</i>&nbsp; *  	Ticket instances hold information of its real-world counterpart as variables.
+<i>400</i>&nbsp; *
+<i>401</i>&nbsp; *  &lt;br&gt; &lt;br&gt;
+<i>402</i>&nbsp; *  Created: &lt;br&gt;
+<i>403</i>&nbsp; *     11 May 2020, Barthelemy Martinon&lt;br&gt;
+<i>404</i>&nbsp; *     With assistance from: &lt;br&gt;
+<i>405</i>&nbsp; *  Modifications: &lt;br&gt;
+<i>406</i>&nbsp; *     11 May 2020, Barthelemy Martinon,    Created class.
+<i>407</i>&nbsp; * &lt;br&gt;
+<i>408</i>&nbsp; *  @author Barthelemy Martinon   With assistance from:
+<i>409</i>&nbsp; *  @version 11 May 2020
+<i>410</i>&nbsp; */
+<i>411</i>&nbsp;class Ticket {//Start of Ticket Class
+<i>412</i>&nbsp;    // Instance Variables
+<i>413</i>&nbsp;    private int ticketID;
+<i>414</i>&nbsp;    private int customerID;
+<i>415</i>&nbsp;    private int accessLevel;
+<i>416</i>&nbsp;    private LocalDateTime startDate;
+<i>417</i>&nbsp;    private LocalDateTime endDate;
+<i>418</i>&nbsp;
+<i>419</i>&nbsp;    // Constructors
+<i>420</i>&nbsp;    public Ticket(int ticketID, int customerID, int accessLevel, LocalDateTime startDate, LocalDateTime endDate) {
+<i>421</i>&nbsp;        this.ticketID = ticketID;
+<i>422</i>&nbsp;        this.customerID = customerID;
+<i>423</i>&nbsp;        this.accessLevel = accessLevel;
+<i>424</i>&nbsp;        this.startDate = startDate;
+<i>425</i>&nbsp;        this.endDate = endDate;
+<i>426</i>&nbsp;    }
+<i>427</i>&nbsp;
+<i>428</i>&nbsp;    public Ticket(int customerID, int accessLevel, LocalDateTime startDate, LocalDateTime endDate) {
+<i>429</i>&nbsp;        this.customerID = customerID;
+<i>430</i>&nbsp;        this.accessLevel = accessLevel;
+<i>431</i>&nbsp;        this.startDate = startDate;
+<i>432</i>&nbsp;        this.endDate = endDate;
+<i>433</i>&nbsp;    }
+<i>434</i>&nbsp;
+<i>435</i>&nbsp;    // Getters
+<i>436</i>&nbsp;    public int getTicketID() {
+<i>437</i>&nbsp;        return ticketID;
+<i>438</i>&nbsp;    }
+<i>439</i>&nbsp;
+<i>440</i>&nbsp;    public int getCustomerID() {
+<i>441</i>&nbsp;        return customerID;
+<i>442</i>&nbsp;    }
+<i>443</i>&nbsp;
+<i>444</i>&nbsp;    public int getAccessLevel() {
+<i>445</i>&nbsp;        return accessLevel;
+<i>446</i>&nbsp;    }
+<i>447</i>&nbsp;
+<i>448</i>&nbsp;    public LocalDateTime getStartDate() {
+<i>449</i>&nbsp;        return startDate;
+<i>450</i>&nbsp;    }
+<i>451</i>&nbsp;
+<i>452</i>&nbsp;    public LocalDateTime getEndDate() {
+<i>453</i>&nbsp;        return endDate;
+<i>454</i>&nbsp;    }
+<i>455</i>&nbsp;
+<i>456</i>&nbsp;    // Setters
+<i>457</i>&nbsp;    public void setTicketID(int ticketID) {
+<i>458</i>&nbsp;        this.ticketID = ticketID;
+<i>459</i>&nbsp;    }
+<i>460</i>&nbsp;
+<i>461</i>&nbsp;    public void setCustomerID(int customerID) {
+<i>462</i>&nbsp;        this.customerID = customerID;
+<i>463</i>&nbsp;    }
+<i>464</i>&nbsp;
+<i>465</i>&nbsp;    public void setAccessLevel(int accessLevel) {
+<i>466</i>&nbsp;        this.accessLevel = accessLevel;
+<i>467</i>&nbsp;    }
+<i>468</i>&nbsp;
+<i>469</i>&nbsp;    public void setStartDate(LocalDateTime startDate) {
+<i>470</i>&nbsp;        this.startDate = startDate;
+<i>471</i>&nbsp;    }
+<i>472</i>&nbsp;
+<i>473</i>&nbsp;    public void setEndDate(LocalDateTime endDate) {
+<i>474</i>&nbsp;        this.endDate = endDate;
+<i>475</i>&nbsp;    }
+<i>476</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 02:18</div>
+</div>
+</body>
+</html>
